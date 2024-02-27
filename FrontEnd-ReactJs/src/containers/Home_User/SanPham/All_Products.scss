@@ -1,0 +1,49 @@
+.allproduct {
+    margin-top: 20px;
+    padding-top: 20px;
+    height: 1350px;
+    background-color: rgb(248, 245, 245);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+
+    .title-allproduct {
+        height: 30px;
+
+        .name {
+            padding-left: 30px;
+            font-size: 20px;
+        }
+
+        a,
+        .xemthem {
+            font-size: 20px;
+            text-decoration: none;
+            color: red;
+        }
+    }
+
+    .product-allproduct {
+
+        .detail-allproduct {
+
+            .css-1 {
+                display: flex;
+                flex-wrap: wrap;
+                column-gap: 2px;
+                place-content: flex-start space-between;
+                background: rgb(246, 246, 246);
+                padding: 2px 0px;
+
+
+                .css-13 {
+                    background: white;
+                    margin-bottom: 2px;
+                    width: calc(20% - 2px);
+                }
+            }
+        }
+    }
+
+
+
+}

@@ -1,0 +1,99 @@
+.card-product {
+    // width: 200px;
+    height: 400px;
+
+    .SP-container {
+        // width: 100%;
+        // height: 100%;
+        // margin-top: 20px;
+        padding: 0 5px;
+        padding-top: 10px;
+        transition: background-color 0.3s;
+
+        .SP-content {
+            // padding: 5px;
+            width: 100%;
+            height: 100%;
+
+            .SP-image {
+                width: 100%;
+                height: 200px;
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: center;
+                background-image: url("../../../assets/Laptop/TUF.webp");
+                cursor: pointer;
+
+                &:hover {
+                    transform: scale(1.04);
+                    transition: all 0.55s;
+                }
+            }
+
+            .SP-detail {
+
+                .proloop-technical {
+                    background: #ECECEC;
+                    border-radius: 4px;
+                    color: #6D6E72;
+                    font-size: 12px;
+                    margin-bottom: 8px;
+                    display: flex;
+                    flex-wrap: wrap;
+                    padding: 1px 2px;
+
+                    .proloop-technical--line {
+                        display: inline-flex;
+                        align-items: center;
+                        padding-bottom: 2px;
+                        margin-right: 10px;
+                    }
+                }
+            }
+
+            .SP-name {
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                -webkit-line-clamp: 2;
+                white-space: normal;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                cursor: pointer;
+
+                .name {
+                    text-align: left;
+                    font-weight: 600;
+
+                    a {
+                        text-decoration: none !important;
+                        color: black;
+
+                        a:hover {
+                            text-decoration: underline;
+                        }
+                    }
+                }
+            }
+
+            .SP-thongtin {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                margin-top: auto;
+                padding-top: 13px;
+
+                .SP-price {
+                    color: orange;
+                    font-size: 16px;
+                    font-weight: 600;
+                    color: #E30019;
+                }
+
+                .SP-Evaluate {
+                    font-size: 12px;
+                }
+            }
+        }
+    }
+}

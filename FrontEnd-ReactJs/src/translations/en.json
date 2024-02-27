@@ -1,0 +1,51 @@
+{
+    "home-header": {
+        "welcome": "Welcome, ",
+        "support": "Support",
+        "connect": "Connect",
+        "seller-centre": "Seller Centre",
+        "login": "Log In",
+        "signup": "Sign Up",
+        "search": "Search for products, brands and shops"
+    },
+    "banner": {
+        "title-1": "HEALTHCARE PLATFORM",
+        "title-2": "COMPREHENSIVE HEALTHCARE",
+        "specialty-checkup": "Specialty Examination",
+        "remote-checkup": "Remote Examination",
+        "general-checkup": "General Checkup",
+        "medical-tests": "Medical Tests",
+        "mental-health": "Mental Health Checkup",
+        "dental-checkup": "Dental Checkup"
+    },
+    "menu": {
+        "admin": {
+            "manage-user": "User Management",
+            "manage-doctor": "Doctor Management",
+            "manage-admin": "Admin Management",
+            "crud": "CRUD User",
+            "crud-redux": "CRUD Redux",
+            "clinic": "Clinic",
+            "manage-clinic": "Clinic Management",
+            "specialty": "Specialty",
+            "manage-specialty": "Specialty Management",
+            "handbook": "Handbook",
+            "manage-handbook": "Handbook Management"
+        }
+    },
+    "manage-user": {
+        "add": "Add new user",
+        "email": "Email",
+        "password": "Password",
+        "firstname": "First name",
+        "lastname": "Last name",
+        "phonenumber": "Phone number",
+        "gender": "Gender",
+        "address": "Address",
+        "position": "Position",
+        "roleid": "Role",
+        "image": "Image",
+        "save": "Save",
+        "edit": "Save edit"
+    }
+}

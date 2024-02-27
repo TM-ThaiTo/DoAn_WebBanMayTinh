@@ -1,0 +1,51 @@
+{
+    "home-header": {
+        "welcome": "Xin chào, ",
+        "support": "Hổ trợ",
+        "connect": "Kết nối",
+        "seller-centre": "Kênh bán hàng",
+        "login": "Đăng Nhập",
+        "signup": "Đăng Ký",
+        "search": "Tìm sản phẩm, thương hiệu, và tên shop"
+    },
+    "banner": {
+        "title-1": "NỀN TẢNG Y TẾ",
+        "title-2": "CHĂM SÓC SỨC KHỎE TOÀN DIỆN",
+        "specialty-checkup": "Khám chuyên khoa",
+        "remote-checkup": "Khám từ xa",
+        "general-checkup": "Khám tổng quát",
+        "medical-tests": "Xét nghiệm y học",
+        "mental-health": "Sức khỏe tinh thần",
+        "dental-checkup": "Khám nha khoa"
+    },
+    "menu": {
+        "admin": {
+            "manage-user": "Người dùng",
+            "manage-doctor": "Quản lý bác sĩ",
+            "manage-admin": "Quản lý admin",
+            "crud": "CRUD user",
+            "crud-redux": "CRUD redux",
+            "clinic": "Phòng khám",
+            "manage-clinic": "Quản lý phòng khám",
+            "specialty": "Chuyên khoa",
+            "manage-specialty": "Quản lý chuyên khoa",
+            "handbook": "Cẩm nang",
+            "manage-handbook": "Quản lý cẩm nang"
+        }
+    },
+    "manage-user": {
+        "add": "Thêm mới người dùng",
+        "email": "Email",
+        "password": "Mật khẩu",
+        "firstname": "Tên",
+        "lastname": "Họ",
+        "phonenumber": "Số điện thoại",
+        "gender": "Giới tính",
+        "address": "Địa chỉ",
+        "position": "Chức danh",
+        "roleid": "Vai trò",
+        "image": "Ảnh đại diện",
+        "save": "Tạo người dùng",
+        "edit": "Lưu thay đổi"
+    }
+}

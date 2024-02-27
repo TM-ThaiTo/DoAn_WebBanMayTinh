@@ -1,0 +1,79 @@
+.brand {
+    margin-top: 20px;
+    height: 280px;
+    background-color: rgb(248, 245, 245);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+
+    .title-brand {
+        height: 50px;
+        padding-top: 10px;
+        padding-left: 30px;
+        font-size: 20px;
+    }
+
+    .items-brand {
+        height: 230px;
+        display: flex;
+
+        .apple {
+            height: 100%;
+            padding-right: 5px;
+            text-align: center;
+
+            .image-Apple {
+                background-image: url('../../../assets/Laptop/Maccbook.jpg');
+            }
+        }
+
+        .msi {
+            height: 100%;
+            padding-right: 5px;
+            text-align: center;
+
+            .image-MSI {
+                background-image: url('../../../assets/Laptop/msi_zjnihe.webp');
+            }
+        }
+
+        .lenovo {
+            height: 100%;
+            padding-right: 5px;
+            text-align: center;
+
+            .image-LENOVO {
+                background-image: url('../../../assets/Laptop/lenovo_trmmkt.webp');
+            }
+        }
+
+        .asus {
+            height: 100%;
+            padding-right: 5px;
+            text-align: center;
+
+            .image-ASUS {
+                background-image: url('../../../assets/Laptop/i0m8aokbv2dngsqb-0_0_desktop_3_1X.webp');
+
+            }
+        }
+    }
+}
+
+.img-design {
+    width: 276px;
+    height: 155px;
+    border-radius: 10px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+
+    &:hover {
+        transform: scale(1.02);
+        transition: all 0.55s;
+    }
+}
+
+.name-slogan {
+    font-size: 20px;
+}
