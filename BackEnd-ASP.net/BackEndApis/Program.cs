@@ -1,4 +1,5 @@
 using BackEndApis.Models;
+using BackEndApis.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
+
+//add Services
+builder.Services.AddScoped<ServicesContex>();
+builder.Services.AddScoped<AccountServices>();
+builder.Services.AddScoped<LoginServices>();
+builder.Services.AddScoped<AdminServices>();
 
 // add Database
 var connectionstring = builder.Configuration.GetConnectionString("AppDBConnectionString");
