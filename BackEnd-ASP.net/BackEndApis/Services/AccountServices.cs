@@ -1,4 +1,5 @@
 ﻿// AccountServices.cs
+using BackEndApis.Helper;
 using BackEndApis.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
@@ -9,29 +10,13 @@ namespace BackEndApis.Services
     public class AccountServices
     {
         private readonly DbWebBanMayTinhContext _db;
+        private readonly HashPassword _hp;
 
-        public AccountServices(DbWebBanMayTinhContext db)
+        public AccountServices(DbWebBanMayTinhContext db, HashPassword hp)
         {
             _db = db;
+            _hp = hp;
         }
-
-        // hash password
-        private string hashPassword(string password)
-        {
-            using (SHA256 sha256Hash = SHA256.Create())
-            {
-                byte[] hashedBytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(password));
-
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < hashedBytes.Length; i++)
-                {
-                    builder.Append(hashedBytes[i].ToString("x2"));
-                }
-
-                return builder.ToString();
-            }
-        }
-
 
         // Xữ lý tạo tài khoản người dùng
         public async Task<string> PostSignUpServices(string Email, string Password, string FullName, DateTime BirthDay, string Gender, string Address)
@@ -45,7 +30,7 @@ namespace BackEndApis.Services
                     return "Email đã tồn tại";
                 }
 
-                string hashedPassword = hashPassword(Password);
+                string hashedPassword = _hp.hashPassword(Password);
 
                 Account newAcc = new Account
                 {
@@ -75,7 +60,5 @@ namespace BackEndApis.Services
                 return ex.ToString();
             }
         }
-
-
     }
 }

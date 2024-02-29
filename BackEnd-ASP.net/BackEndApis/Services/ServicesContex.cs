@@ -11,7 +11,6 @@
 
         public AccountServices AccountServices { get; }
         public LoginServices LoginServices { get; }
-
         public AdminServices AdminServices { get; }
     }
 }

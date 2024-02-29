@@ -55,13 +55,15 @@ class Login extends Component {
         //         }
         //     }
         // }
-        let data = await handleLoginApi(this.state.username, this.state.password);
-        console.log(
-            "Check data từ backend: ", data
-        );
-        // if (1 === 1) {
-        //     this.props.userLoginSuccess("ADMIN");
-        // }
+        let res = await handleLoginApi(this.state.username, this.state.password);
+        console.log("Check res: ", res);
+        // Giải mã chuỗi JSON
+        console.log("Check message: ", res.message);
+        // let dataObject = JSON.parse(res.data);
+        console.log("Check message:", res.data.email);
+
+        // // Truy cập các thuộc tính bên trong
+        // console.log("Check email: ", dataObject.Email);
     }
 
     // xự kiện nhấn ẩn/hiện mật khẩu

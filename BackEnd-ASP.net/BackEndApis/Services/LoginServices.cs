@@ -16,6 +16,7 @@ namespace BackEndApis.Services
             _db = db;
         }
 
+
         // hash password
         private string HashPassword(string password)
         {
@@ -59,23 +60,25 @@ namespace BackEndApis.Services
 
             var userInfo = new
             {
+                role = "User",
                 Email = checkLogin.Email,
                 UserId = infoUser.Id,
                 FullName = infoUser.FullName,
-                Birthday = infoUser.Birthday,
+                Birthday = infoUser.Birthday ?? DateTime.MinValue,
                 Gender = infoUser.Gender,
                 Address = infoUser.Address
             };
 
-            var thongtin = new
+            /*var thongtin = new
             {
-                role = "User",
-                info = userInfo,
-            };
+                Role = "User",
+                Info = userInfo
+            };*/
 
-            string jsonUserInfo = JsonConvert.SerializeObject(thongtin);
+            string jsonUserInfo = JsonConvert.SerializeObject(userInfo);
 
-            return jsonUserInfo;
+            /*return jsonUserInfo;*/
+            return "OK";
         }
     }
 }

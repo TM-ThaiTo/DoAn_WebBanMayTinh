@@ -2,8 +2,8 @@ import axios from "../axios"
 
 const handleLoginApi = (userEmail, userPassword) => {
     // return axios.post('/api/login', { email: userEmail, password: userPassword });
-
-    return axios.post('/api/account/verify/forgot');
+    return axios.post('/api/Login', { Email: userEmail, Password: userPassword });
+    // return axios.post('/api/account/verify/forgot');
 }
 
 const createNewUser = (data) => {

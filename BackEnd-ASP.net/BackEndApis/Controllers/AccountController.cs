@@ -16,22 +16,38 @@ namespace BackEndApis.Controllers
             _sc = sc;
         }
 
+        public class InfoUserSignUp
+        {
+            public string email { get; set; } = string.Empty;
+            public string password { get; set; } = string.Empty;
+            public string googleId { get; set; } = string.Empty;
+            public string authType { get; set; } = string.Empty;
+            public int failedLoginTimes { get; set; } = 0;
+            public string refreshToken { get; set; } = string.Empty;
+
+            public string fullName { get; set; } = string.Empty;
+            public DateTime birthDay { get; set; }
+            public string gender { get; set; } = string.Empty;
+            public string address { get; set; } = string.Empty;
+        }
+
+
         // POST signup đăng kí tài khoản
         [HttpPost("signup")]
-        public async Task<IActionResult> PostSignUp([FromQuery] string Email, [FromQuery] string Password, [FromQuery] string FullName,
-                                        [FromQuery] DateTime BirthDay, [FromQuery] string Gender, [FromQuery] string Address)
+        public async Task<IActionResult> PostSignUp([FromBody] InfoUserSignUp model)
         {
-            if (Email == "NULL" || Password == "NULL")
+            if (model == null || string.IsNullOrWhiteSpace(model.email) || string.IsNullOrWhiteSpace(model.password))
             {
                 return Ok(new
                 {
                     code = 1,
-                    message = "Thiếu thông tin người dùng"
+                    message = "Thiếu thông tin đăng nhập",
                 });
             }
+
             try
             {
-                string check = await _sc.AccountServices.PostSignUpServices(Email, Password, FullName, BirthDay, Gender, Address);
+                string check = await _sc.AccountServices.PostSignUpServices(model.email, model.password, model.fullName, model.birthDay, model.gender, model.address);
 
                 if (check == "OK")
                 {

@@ -1,3 +1,4 @@
+using BackEndApis.Helper;
 using BackEndApis.Models;
 using BackEndApis.Services;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
+
+// add Helper
+/*builder.Services.AddScoped<HelperContext>();*/
+builder.Services.AddScoped<HashPassword>();
 
 //add Services
 builder.Services.AddScoped<ServicesContex>();
@@ -31,7 +36,14 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 
-app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod());
+app.UseCors(builder =>
+{
+    builder
+    .AllowAnyOrigin()
+    .AllowAnyHeader() .AllowAnyMethod();
+});
+
+/*app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod());*/
 
 app.MapControllers();
 
