@@ -17,11 +17,13 @@ namespace BackEndApis.Controllers
         private readonly DbWebBanMayTinhContext _db;
         private readonly HashPassword _hp;
         private readonly ServicesContex _sc;
-        public LoginController ( ServicesContex sc, DbWebBanMayTinhContext db, HashPassword hp)
+        private readonly Info _info;
+        public LoginController ( ServicesContex sc, DbWebBanMayTinhContext db, HashPassword hp, Info info)
         {
             _db = db;
             _sc = sc;
             _hp = hp;
+            _info = info;
         }
 
         public class LoginModel
@@ -32,7 +34,7 @@ namespace BackEndApis.Controllers
 
         //==== Post Login user --- bằng account ====//
         [HttpPost]
-        public async Task<IActionResult> PostLogin([FromBody] LoginModel model)
+        public async Task<IActionResult> PostLogin([FromBody] Info.InfoLogin model)
         {
             if (model == null || string.IsNullOrWhiteSpace(model.Email) || string.IsNullOrWhiteSpace(model.Password))
             {
@@ -95,8 +97,5 @@ namespace BackEndApis.Controllers
                 data = userInfo
             });
         }
-
-
-
     }
 }

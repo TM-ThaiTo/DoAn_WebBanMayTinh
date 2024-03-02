@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using BackEndApis.Services;
+using BackEndApis.Helper;
 
 namespace BackEndApis.Controllers
 {
@@ -10,31 +11,17 @@ namespace BackEndApis.Controllers
     public class AccountController : ControllerBase
     {
         private readonly ServicesContex _sc;
+        private readonly Info _info;
 
-        public AccountController(ServicesContex sc)
+        public AccountController(ServicesContex sc, Info info)
         {
             _sc = sc;
+            _info = info;
         }
-
-        public class InfoUserSignUp
-        {
-            public string email { get; set; } = string.Empty;
-            public string password { get; set; } = string.Empty;
-            public string googleId { get; set; } = string.Empty;
-            public string authType { get; set; } = string.Empty;
-            public int failedLoginTimes { get; set; } = 0;
-            public string refreshToken { get; set; } = string.Empty;
-
-            public string fullName { get; set; } = string.Empty;
-            public DateTime birthDay { get; set; }
-            public string gender { get; set; } = string.Empty;
-            public string address { get; set; } = string.Empty;
-        }
-
 
         // POST signup đăng kí tài khoản
         [HttpPost("signup")]
-        public async Task<IActionResult> PostSignUp([FromBody] InfoUserSignUp model)
+        public async Task<IActionResult> PostSignUp([FromBody] Info.InfoUser model)
         {
             if (model == null || string.IsNullOrWhiteSpace(model.email) || string.IsNullOrWhiteSpace(model.password))
             {

@@ -1,9 +1,12 @@
-﻿using BackEndApis.Models;
+﻿using BackEndApis.Helper;
+using BackEndApis.Models;
 using BackEndApis.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using static BackEndApis.Helper.Info;
 
 namespace BackEndApis.Controllers
 {
@@ -13,31 +16,18 @@ namespace BackEndApis.Controllers
     {
         private readonly ServicesContex _sc;
         private readonly DbWebBanMayTinhContext _db;
-
-        public AdminController(ServicesContex sc, DbWebBanMayTinhContext db)
+        private readonly Info _info;
+        public AdminController(ServicesContex sc, DbWebBanMayTinhContext db, Info info)
         {
             _sc = sc;
             _db = db;
+            _info = info;
         }
 
         #region CRUD tài khoản Admin
-        //=== thông tin admin ===//
-        public class InfoAdmin
-        {
-            public int? id { get; set; }
-            public string userName { get; set; } = string.Empty;
-            public string password { get; set; } = string.Empty;
-            public string Email { get; set; } = string.Empty;
-            public string fullName { get; set; } = string.Empty;
-            public int age { get; set; }
-            public string phone { get; set; } = string.Empty;
-            public string fb { get; set; } = string.Empty;
-            public string address { get; set; } = string.Empty;
-        }
-
         //=== POST add-admin ===//
         [HttpPost("add-admin")]
-        public async Task<IActionResult> PostVerify([FromBody] InfoAdmin model)
+        public async Task<IActionResult> PostVerify([FromBody] Info.InfoAdmin model)
         {
             if (model == null || string.IsNullOrWhiteSpace(model.userName) || string.IsNullOrWhiteSpace(model.password))
             {
@@ -87,7 +77,7 @@ namespace BackEndApis.Controllers
                     // Lấy thông tin admin theo ID
                     var adminInfo = await _db.Admins
                         .Where(ad => ad.Id == id.Value)
-                        .Select(ad => new InfoAdmin
+                        .Select(ad => new Info.InfoAdmin
                         {
                             id = ad.Id,
                             userName = ad.UserName ?? string.Empty,
@@ -133,7 +123,7 @@ namespace BackEndApis.Controllers
                 {
                     // Lấy tất cả thông tin admin
                     var allAdmins = await _db.Admins
-                        .Select(ad => new InfoAdmin
+                        .Select(ad => new Info.InfoAdmin
                         {
                             id = ad.Id,
                             userName = ad.UserName ?? string.Empty,
@@ -166,7 +156,7 @@ namespace BackEndApis.Controllers
 
         // === PUT update-admin ===//
         [HttpPut("update-admin")]
-        public async Task<IActionResult> UpdateAdmin([FromBody] InfoAdmin model)
+        public async Task<IActionResult> UpdateAdmin([FromBody] Info.InfoAdmin model)
         {
             if (model == null || model.id == null || model.id <= 0)
             {
@@ -276,25 +266,9 @@ namespace BackEndApis.Controllers
         #endregion
 
         #region CRUD tài khoản User
-        public class InfoUser
-        {
-            public int? Id_account { get; set; }
-            public string email { get; set; } = string.Empty;
-            public string password { get; set; } = string.Empty;
-            public string googleId { get; set; } = string.Empty;
-            public string authType { get; set; } = string.Empty;
-            public int failedLoginTimes { get; set; } = 0;
-            public string refreshToken { get; set; } = string.Empty;
-
-            public string fullName { get; set; } = string.Empty;
-            public DateTime birthDay { get; set; }
-            public string gender { get; set; } = string.Empty;
-            public string address { get; set; } = string.Empty;
-        }
-
         //=== POST add-user ===//
         [HttpPost("add-user")]
-        public async Task<IActionResult> PostAddUser([FromBody] InfoUser user)
+        public async Task<IActionResult> PostAddUser([FromBody] Info.InfoUser user)
         {
             try
             {
@@ -343,7 +317,7 @@ namespace BackEndApis.Controllers
                 {
                     var accountInfo = await _db.Accounts
                         .Where(ad => ad.Id == id.Value)
-                        .Select(ad => new InfoUser
+                        .Select(ad => new Info.InfoUser
                         {
                             Id_account = ad.Id,
                             email = ad.Email ?? string.Empty,
@@ -358,7 +332,7 @@ namespace BackEndApis.Controllers
                     {
                         var userInfo = await _db.Users
                             .Where(u => u.AccountId == accountInfo.Id_account)
-                            .Select(u => new InfoUser
+                            .Select(u => new Info.InfoUser
                             {
                                 fullName = u.FullName ?? string.Empty,
                                 birthDay = u.Birthday ?? DateTime.MinValue,
@@ -401,7 +375,7 @@ namespace BackEndApis.Controllers
                 try
                 {
                     var allUsers = await _db.Users
-                        .Select(u => new InfoUser
+                        .Select(u => new Info.InfoUser
                         {
                             Id_account = u.AccountId,
                             email = u.Account != null ? u.Account.Email ?? string.Empty : string.Empty,
@@ -435,7 +409,7 @@ namespace BackEndApis.Controllers
 
         //=== PUT up-user ===//
         [HttpPut("up-user")]
-        public async Task<IActionResult> PutUpdateUser([FromQuery] InfoUser user)
+        public async Task<IActionResult> PutUpdateUser([FromQuery] Info.InfoUser user)
         {
             if (user == null || user.Id_account == null || user.Id_account <= 0)
             {
@@ -534,6 +508,149 @@ namespace BackEndApis.Controllers
                     message = "Lỗi server khi xóa người dùng",
                 });
             }
+        }
+        #endregion
+
+        #region CRUD product
+        [HttpPost("upload-images")]
+        public async Task<IActionResult> UploadImages([FromForm] List<IFormFile> images)
+        {
+            if (images == null || images.Count == 0)
+            {
+                return BadRequest("No images selected for upload");
+            }
+
+            // Đường dẫn lưu trữ cụ thể
+            var uploadPath = @"E:\image_doan\image";
+
+            foreach (var image in images)
+            {
+                if (image == null || image.Length == 0)
+                {
+                    // Bỏ qua tệp tin không hợp lệ
+                    continue;
+                }
+
+                // Tạo đường dẫn đầy đủ để lưu trữ file
+                var filePath = Path.Combine(uploadPath, image.FileName);
+
+                // Xử lý lưu trữ file ảnh ở đây
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await image.CopyToAsync(stream);
+                }
+            }
+
+            return Ok("Images uploaded successfully");
+        }
+
+        //=== POST add-product (Thêm 1 sản phẩm) ===//
+        [HttpPost("products/add")]
+        public async Task<IActionResult> PostAddProducts([FromBody] JsonDocument requestDat, [FromForm] IFormFile image)
+        {
+            // Lấy dữ liệu product trong request
+            var product = requestDat.RootElement.GetProperty("product");
+            var details = requestDat.RootElement.GetProperty("details");
+
+            // gán giá trị infoProduct == null thì trả về InfoProduct => rỗng
+            Info.InfoProduct infoProduct = JsonSerializer.Deserialize<InfoProduct>(product.GetRawText()) ?? new InfoProduct();
+
+            string res = await _sc.AdminServices.PutAddProductServices(infoProduct, details.GetRawText());
+
+            if(res == "3")
+            {
+                return Ok(new
+                {
+                    code = 3,
+                    message = "Thiếu dữ liệu bắt buộc của các thành phần",
+                });
+            } // lỗi thiếu dữ liệu
+
+            if (res == "4")
+            {
+                return Ok(new
+                {
+                    code = 5,
+                    message = "Lỗi server lưu trữ",
+                });
+            } // lỗi lưu trữ server
+
+            if (res == "5")
+            {
+                return Ok(new
+                {
+                    code = 5,
+                    message = "Lỗi lưu dữ liệu hoặc lỗi API",
+                });
+            } // Lỗi API
+
+            if(res == "Sản phẩm đã tồn tại")
+            {
+                return Ok(new
+                {
+                    code = 6,
+                    message = "Sản phẩm đã tồn tại",
+                });
+            }// lỗi khi sản phẩm đã tồn tại
+
+            if(res == "Không tìm thấy idProduct")
+            {
+                return Ok(new
+                {
+                    code = 7,
+                    message = "Không tìm thấy idProduct",
+                });
+            }// lỗi khi không thể lưu chi tiết sản phẩm theo idProduct
+
+            if(res == "lỗi")
+            {
+                return Ok(new
+                {
+                    code = 2,
+                    message = "Lỗi khi lưu sản phẩm",
+                });
+            } // lỗi lưu sản phẩm
+            else
+            {
+                return Ok(new
+                {
+                    code = 0,
+                    message = "Lưu sản phẩm thành công",
+                });
+            }// lưu thành công
+        }
+
+        //=== GET (lấy danh sách sản phẩm) ===//
+        [HttpGet("products")]
+        public IActionResult GetProducts()
+        {
+            return Ok(new
+            {
+                code = 0,
+                message = "Lấy thông tin sản phẩm thành công",
+            });
+        }
+
+        //=== PUT update-product (chỉnh sửa thông tin sản phẩm) ===//
+        [HttpPut("products/up-product")]
+        public IActionResult PutUpdateProduct()
+        {
+            return Ok(new
+            {
+                code = 0,
+                message = "Update thông tin sản phẩm thành công",
+            });
+        }
+
+        //=== DELETE del-product (xóa sản phẩm) ===//
+        [HttpDelete("products/del-product")]
+        public IActionResult DeleteProduct()
+        {
+            return Ok(new
+            {
+                code = 0,
+                message = "Xóa sản phẩm thành công",
+            });
         }
         #endregion
     }

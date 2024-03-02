@@ -11,8 +11,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
 
 // add Helper
-/*builder.Services.AddScoped<HelperContext>();*/
 builder.Services.AddScoped<HashPassword>();
+builder.Services.AddScoped<Info>();
 
 //add Services
 builder.Services.AddScoped<ServicesContex>();
@@ -42,8 +42,6 @@ app.UseCors(builder =>
     .AllowAnyOrigin()
     .AllowAnyHeader() .AllowAnyMethod();
 });
-
-/*app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod());*/
 
 app.MapControllers();
 
