@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Infrastructure;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.AspNetCore.Http;
 
 namespace BackEndApis.Helper
 {
@@ -49,6 +50,58 @@ namespace BackEndApis.Helper
         }
         #endregion
 
+        #region Thông tin cấu trúc các Request 
+
+        #region Request thông tin khi thêm sản phẩm sản phẩm
+        //=== Request tổng thể khi thêm Product ===//
+        public class ProductRequestModel
+        {
+            public InfoProduct? product { get; set; }
+            public InfoDesc? desc { get; set; }
+            public InfoDetailsModel? details { get; set; }
+        }
+
+        //=== desc Product ===//
+        public class InfoDesc
+        {
+            public string? title { get; set; }
+            public Detail_Des[]? detailDesList { get; set; }
+        }
+        public class Detail_Des
+        {
+            public string? content { get; set; }
+            public string? urlPhoto { get; set; }
+            public string? photo { get; set; } // chứa chuỗi base64
+        }
+
+        //=== details Product map to request ===//
+        public class InfoDetailsModel
+        {
+            public InfoDetail? shareDetails { get; set; }
+            public InfodescPrvDetails? prvDetails { get; set; }
+        }
+        public class InfodescPrvDetails
+        {
+            public InfoRam? InfoRam { get; set; }
+            public InfoDisk? InfoDisk { get; set; }
+            public InfoLaptop? InfoLaptop { get; set; }
+            public InfoDisplay? InfoDisplay { get; set; }
+            public InfoMainBoard? InfoMainBoard { get; set; }
+
+            public InfoHeadphone? InfoHeadphone { get; set; }
+            public InfoKeyboard? InfoKeyboard { get; set; }
+            public InfoMonitor? InfoMonitor { get; set; }
+            public InfoMouse? InfoMouse { get; set; }
+            public InfoRouter? InfoRouter { get; set; }
+            public InfoSpeaker? InfoSpeaker { get; set; }
+
+            public InfoCamera? InfoCamera { get; set; }
+            public InfoWebcam? InfoWebcam { get; set; }
+        }
+        #endregion
+
+        #endregion
+
         #region Thông tin sản phẩm
         //=== thông tin Product ===//
         public class InfoProduct
@@ -72,7 +125,7 @@ namespace BackEndApis.Helper
             // avatar: đường dẫn ảnh đại diện của sản phẩm
             public string avt { get; set; } = string.Empty;
             // avatar: base64
-            public byte[] avtBase64 { get; set; } = Array.Empty<byte>();
+            public string avtBase64 { get; set; } = string.Empty;
 
             // stock: số lượng sản phẩm tồn kho
             public int? stock { get; set; }
@@ -86,14 +139,23 @@ namespace BackEndApis.Helper
             // vd: {key: 'ưu đãi kèm theo', value: 'Một con chuột không dây'}
             public string other_info { get; set; } = string.Empty;
         }
-        public class DetailProduct
+        
+        //=== details Product ===//
+        public class InfoDetail
         {
-            
-        }
+            // warranty: thời gian bảo hành theo tháng
+            public string warranty { get; set; } = string.Empty;
 
+            public string linkCatalogs {  get; set; } = string.Empty;
+            // catalogs: link hình ảnh sản phẩm 
+            public string[] catalogs { get; set; } = Array.Empty<string>();
+            // details: bài viết mô tả chi tiết
+            public int? details { get; set; }
+        } // cha chứa các thông tin cơ bản của 1 product 
+        
         #region computer model
         //=== thông tin ram ===//
-        public class InfoRam : DetailProduct
+        public class InfoRam : InfoDetail
         {
             // id_product
             public int? id_product { get; set; }
@@ -104,15 +166,9 @@ namespace BackEndApis.Helper
             // type: thế hệ ram 
             //thế hệ RAM, hay loại RAM: DDR3, DDR3L, DDR4
             public string type { get; set; } = string.Empty;
-            // warranty: thời gian bảo hành theo tháng
-            public string warranty { get; set; } = string.Empty;
-            // catalogs: link hình ảnh sản phẩm 
-            public string catalogs { get; set; } = string.Empty;
-            // details: bài viết mô tả chi tiết
-            public int? details { get; set; }
         }
         //=== thông tin disk (ổ cứng) ===//
-        public class InfoDisk : DetailProduct
+        public class InfoDisk : InfoDetail
         {
             // id_product
             public int? id_product { get; set; }
@@ -137,16 +193,10 @@ namespace BackEndApis.Helper
             rpm: { type: Number, default: 1500 },
                 },*/
             public string speed { get; set; } = string.Empty;
-            // thời gian bảo hành tính theo tháng
-            public string warranty { get; set; } = string.Empty;
-            // các hình ảnh của sản phẩm
-            public string catalogs { get; set; } = string.Empty;
-            // details: bài viết mô tả chi tiết
-            public int? details { get; set; }
         }
 
         //=== thông tin laptop ===//
-        public class InfoLaptop
+        public class InfoLaptop : InfoDetail
         {
             // id_product
             public int? id_product { get; set; }
@@ -177,31 +227,19 @@ namespace BackEndApis.Helper
             public string pin { get; set; } = string.Empty;
             //khối lượng: 2.1 kg
             public string weight { get; set; } = string.Empty;
-            // các hình ảnh sản phẩm
-            public string catalogs { get; set; } = string.Empty;
-            // thời gian bảo hành tính theo tháng
-            public string warranty { get; set; } = string.Empty;
-            // details: bài viết mô tả chi tiết
-            public int? details { get; set; }
         }
 
         //=== thông tin display (card màn hình) ===//
-        public class InfoDisplay
+        public class InfoDisplay : InfoDetail
         {
             // id_product
             public int? id_product { get; set; }
             // dung lượng tính theo GB
             public string capacity { get; set; } = string.Empty;
-            // thời gian bảo hành tính theo tháng
-            public string warranty { get; set; } = string.Empty;
-            // các hình ảnh của sản phẩm
-            public string catalogs { get; set; } = string.Empty;
-            // details: bài viết mô tả chi tiết
-            public int? details { get; set; }
         }
 
         //=== thông tin mainboard ===//
-        public class InfoMainBoard
+        public class InfoMainBoard : InfoDetail
         {
             // id_product
             public int? id_product { get; set; }
@@ -213,18 +251,12 @@ namespace BackEndApis.Helper
             public string socketType { get; set; } = string.Empty;
             // chuẩn kích thước: 0 - Micro-ATX, 1 - ATX, 2 - Extended-ATX, 3 - Mini-ATX, 4 - XL-ATX
             public string sizeStd { get; set; } = string.Empty;
-            // thời gian bảo hành tính theo tháng
-            public string warranty { get; set; } = string.Empty;
-            // các hình ảnh của sản phẩm
-            public string catalogs { get; set; } = string.Empty;
-            // details: bài viết mô tả chi tiết
-            public int? details { get; set; }
         }
         #endregion
 
         #region peripheral model (phụ kiện, gear)
         //=== headphone ===//
-        public class InfoHeadphone
+        public class InfoHeadphone : InfoDetail
         {
             // id_product
             public int? id_product { get; set; }
@@ -233,16 +265,10 @@ namespace BackEndApis.Helper
             // chuẩn kết nối
             // 0 - 3.5mm, 1 - bluetooth, 2 - USB, 3 - Bluetooth 4.0, 4 - bluetooth 5.0, 5 - 2.4 GHz Wireless
             public string connectionStd { get; set; } = string.Empty;
-            // thời gian bảo hành tính theo tháng
-            public string warranty { get; set; } = string.Empty;
-            // các hình ảnh của sản phẩm
-            public string catalogs { get; set; } = string.Empty;
-            // details: bài viết mô tả chi tiết
-            public int? details { get; set; }
         }
 
         //=== keyboard ===//
-        public class InfoKeyboard
+        public class InfoKeyboard : InfoDetail
         {
             // id_product
             public int? id_product { get; set; }
@@ -252,16 +278,10 @@ namespace BackEndApis.Helper
             public string color { get; set; } = string.Empty;
             // màu led bàn phím: 0 - không led, 1- đơn sắc, 2 - rainbow, 3 - RGB
             public string ledColor { get; set; } = string.Empty;
-            // thời gian bảo hành tính theo tháng
-            public string warranty { get; set; } = string.Empty;
-            // các hình ảnh của sản phẩm
-            public string catalogs { get; set; } = string.Empty;
-            // details: bài viết mô tả chi tiết
-            public int? details { get; set; }
         }
 
         //=== monitor (màn hình) ===//
-        public class InfoMonitor
+        public class InfoMonitor : InfoDetail
         {
             // id_product
             public int? id_product { get; set; }
@@ -276,17 +296,10 @@ namespace BackEndApis.Helper
             public string frequency { get; set; } = string.Empty;
             // các công kết nối, vd: 1 x HDMI, 1 x DVI-D, 1 x VGA/D-sub
             public string port { get; set; } = string.Empty;
-
-            // thời gian bảo hành tính theo tháng
-            public string warranty { get; set; } = string.Empty;
-            // các hình ảnh của sản phẩm
-            public string catalogs { get; set; } = string.Empty;
-            // details: bài viết mô tả chi tiết
-            public int? details { get; set; }
         }
 
         //=== mouse (chuột) ===//
-        public class InfoMouse
+        public class InfoMouse : InfoDetail
         {
             // id_product
             public int? id_product { get; set; }
@@ -294,16 +307,10 @@ namespace BackEndApis.Helper
             public string type { get; set; } = string.Empty;
             // có led hay không
             public string isLed { get; set; } = string.Empty;
-            // thời gian bảo hành tính theo tháng
-            public string warranty { get; set; } = string.Empty;
-            // các hình ảnh của sản phẩm
-            public string catalogs { get; set; } = string.Empty;
-            // details: bài viết mô tả chi tiết
-            public int? details { get; set; }
         }
 
         //=== router (wifi) ===//
-        public class InfoRouter
+        public class InfoRouter : InfoDetail
         {
             // id_product
             public int? id_product { get; set; }
@@ -313,16 +320,10 @@ namespace BackEndApis.Helper
             public string strong { get; set; } = string.Empty;
             // số cổng kết nối: '1xWAN Gigabit'
             public string numberOfPort { get; set; } = string.Empty;
-            // thời gian bảo hành tính theo tháng
-            public string warranty { get; set; } = string.Empty;
-            // các hình ảnh của sản phẩm
-            public string catalogs { get; set; } = string.Empty;
-            // details: bài viết mô tả chi tiết
-            public int? details { get; set; }
         }
 
         //=== speaker (loa) ===//
-        public class InfoSpeaker
+        public class InfoSpeaker : InfoDetail
         {
             // id_product
             public int? id_product { get; set; }
@@ -330,18 +331,12 @@ namespace BackEndApis.Helper
             public string wattage { get; set; } = string.Empty;
             // loại cổng kết nối
             public string connectionPort { get; set; } = string.Empty;
-            // thời gian bảo hành tính theo tháng
-            public string warranty { get; set; } = string.Empty;
-            // các hình ảnh của sản phẩm
-            public string catalogs { get; set; } = string.Empty;
-            // details: bài viết mô tả chi tiết
-            public int? details { get; set; }
         }
         #endregion
         
         #region camera model
         //=== thông tin camera ===//
-        public class InfoCamera
+        public class InfoCamera : InfoDetail
         {
             // id_product
             public int? id_product { get; set; }
@@ -356,16 +351,10 @@ namespace BackEndApis.Helper
             // resolution: độ phân giải
             // (vd: 6000 x 4000 (L) 3984 x 2656 (M) 2976 x 1984 (S1) 2400 x 1600 (S2) 6000 x 4000 (RAW)
             public string resolution { get; set; } = string.Empty;
-            // warranty: thời gian bảo hành tính theo tháng
-            public string warranty { get; set; } = string.Empty;
-            // catalogs: link thông tin ảnh
-            public string catalogs { get; set; } = string.Empty;
-            // details: bài viết mô tả chi tiết
-            public int? details { get; set; }
         }
 
         //=== thông tin webcam ===//
-        public class InfoWebcam
+        public class InfoWebcam : InfoDetail
         {
             // id product
             public int? id_product { get; set; }
@@ -375,12 +364,6 @@ namespace BackEndApis.Helper
             public string frameSpeed { get; set; } = string.Empty;
             // độ phân giải: 0 - 720, 1 - 1280x720, 2 - 1920x1800
             public string resolution { get; set; } = string.Empty;
-            // thời gian bảo hành tính theo tháng
-            public string warranty { get; set; } = string.Empty;
-            // các hình ảnh của sản phẩm
-            public string catalogs { get; set; } = string.Empty;
-            // details: bài viết mô tả chi tiết
-            public int? details { get; set; }
         }
         #endregion
 
@@ -400,6 +383,14 @@ namespace BackEndApis.Helper
         }
 
         //=== orders ===//
+        #endregion
+
+        #region Kết quả trả về
+        public class ResultReturn
+        {
+            public int Code { get; set; }
+            public string Message { get; set; } = string.Empty;
+        }
         #endregion
     }
 }

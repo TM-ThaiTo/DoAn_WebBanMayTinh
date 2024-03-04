@@ -233,3 +233,5 @@ E:\DoAn_WebBanMayTinh\BackEnd-ASP.net\BackEndApis\obj\Debug\net8.0\BackEndApis.g
 E:\DoAn_WebBanMayTinh\BackEnd-ASP.net\BackEndApis\obj\Debug\net8.0\ref\BackEndApis.dll
 E:\DoAn_WebBanMayTinh\BackEnd-ASP.net\BackEndApis\obj\Debug\net8.0\BackEndApis.sourcelink.json
 E:\DoAn_WebBanMayTinh\BackEnd-ASP.net\BackEndApis\bin\Debug\net8.0\Newtonsoft.Json.dll
+E:\DoAn_WebBanMayTinh\BackEnd-ASP.net\BackEndApis\bin\Debug\net8.0\AutoMapper.dll
+E:\DoAn_WebBanMayTinh\BackEnd-ASP.net\BackEndApis\bin\Debug\net8.0\CloudinaryDotNet.dll

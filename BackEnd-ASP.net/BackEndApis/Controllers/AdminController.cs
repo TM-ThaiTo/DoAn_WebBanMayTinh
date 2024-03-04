@@ -1,4 +1,5 @@
-﻿using BackEndApis.Helper;
+﻿using AutoMapper;
+using BackEndApis.Helper;
 using BackEndApis.Models;
 using BackEndApis.Services;
 using Microsoft.AspNetCore.Http;
@@ -17,11 +18,15 @@ namespace BackEndApis.Controllers
         private readonly ServicesContex _sc;
         private readonly DbWebBanMayTinhContext _db;
         private readonly Info _info;
-        public AdminController(ServicesContex sc, DbWebBanMayTinhContext db, Info info)
+
+        private readonly IMapper _mapper;
+
+        public AdminController(ServicesContex sc, DbWebBanMayTinhContext db, Info info, IMapper mapper)
         {
             _sc = sc;
             _db = db;
             _info = info;
+            _mapper = mapper;
         }
 
         #region CRUD tài khoản Admin
@@ -546,78 +551,19 @@ namespace BackEndApis.Controllers
 
         //=== POST add-product (Thêm 1 sản phẩm) ===//
         [HttpPost("products/add")]
-        public async Task<IActionResult> PostAddProducts([FromBody] JsonDocument requestDat, [FromForm] IFormFile image)
+        public async Task<IActionResult> PostAddProducts([FromBody] Info.ProductRequestModel request)
         {
-            // Lấy dữ liệu product trong request
-            var product = requestDat.RootElement.GetProperty("product");
-            var details = requestDat.RootElement.GetProperty("details");
+            InfoProduct infoProduct = _mapper.Map<InfoProduct>(request.product);
+            InfoDesc infoDesc = _mapper.Map<InfoDesc>(request.desc);
+            InfoDetailsModel infoDetail = _mapper.Map<InfoDetailsModel>(request.details);
 
-            // gán giá trị infoProduct == null thì trả về InfoProduct => rỗng
-            Info.InfoProduct infoProduct = JsonSerializer.Deserialize<InfoProduct>(product.GetRawText()) ?? new InfoProduct();
+            Info.ResultReturn a = await _sc.AdminServices.PutAddProductServices(infoProduct, infoDesc, infoDetail);
 
-            string res = await _sc.AdminServices.PutAddProductServices(infoProduct, details.GetRawText());
-
-            if(res == "3")
+            return Ok(new
             {
-                return Ok(new
-                {
-                    code = 3,
-                    message = "Thiếu dữ liệu bắt buộc của các thành phần",
-                });
-            } // lỗi thiếu dữ liệu
-
-            if (res == "4")
-            {
-                return Ok(new
-                {
-                    code = 5,
-                    message = "Lỗi server lưu trữ",
-                });
-            } // lỗi lưu trữ server
-
-            if (res == "5")
-            {
-                return Ok(new
-                {
-                    code = 5,
-                    message = "Lỗi lưu dữ liệu hoặc lỗi API",
-                });
-            } // Lỗi API
-
-            if(res == "Sản phẩm đã tồn tại")
-            {
-                return Ok(new
-                {
-                    code = 6,
-                    message = "Sản phẩm đã tồn tại",
-                });
-            }// lỗi khi sản phẩm đã tồn tại
-
-            if(res == "Không tìm thấy idProduct")
-            {
-                return Ok(new
-                {
-                    code = 7,
-                    message = "Không tìm thấy idProduct",
-                });
-            }// lỗi khi không thể lưu chi tiết sản phẩm theo idProduct
-
-            if(res == "lỗi")
-            {
-                return Ok(new
-                {
-                    code = 2,
-                    message = "Lỗi khi lưu sản phẩm",
-                });
-            } // lỗi lưu sản phẩm
-            else
-            {
-                return Ok(new
-                {
-                    code = 0,
-                    message = "Lưu sản phẩm thành công",
-                });
-            }// lưu thành công
+                code = a.Code,
+                message = a.Message,
+            }) ;
         }
 
         //=== GET (lấy danh sách sản phẩm) ===//
