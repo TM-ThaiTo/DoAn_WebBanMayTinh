@@ -5798,11 +5798,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\DoAn_WebBanMayTinh\\BackEnd-ASP.net\\BackEndApis\\BackEndApis.csproj",
+      "projectUniqueName": "E:\\HocTap\\Web\\DoAn_WebBanMayTinh\\BackEnd-ASP.net\\BackEndApis\\BackEndApis.csproj",
       "projectName": "BackEndApis",
-      "projectPath": "E:\\DoAn_WebBanMayTinh\\BackEnd-ASP.net\\BackEndApis\\BackEndApis.csproj",
+      "projectPath": "E:\\HocTap\\Web\\DoAn_WebBanMayTinh\\BackEnd-ASP.net\\BackEndApis\\BackEndApis.csproj",
       "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-      "outputPath": "E:\\DoAn_WebBanMayTinh\\BackEnd-ASP.net\\BackEndApis\\obj\\",
+      "outputPath": "E:\\HocTap\\Web\\DoAn_WebBanMayTinh\\BackEnd-ASP.net\\BackEndApis\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",

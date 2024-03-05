@@ -114,50 +114,9 @@ namespace BackEndApis.Services
         }
         #endregion
 
-        
-        /*public async Task<string> AddDisk(Info.InfoProduct product, Info.InfoDisk disk)
-        {
-            try
-            {
-                int? idProduct = await addProducts(product);
-
-                if (idProduct == -1)
-                {
-                    return "Sản phẩm đã tồn tại";
-                }
-
-                if (idProduct.HasValue)
-                {
-
-                    BackEndApis.Models.Disk aDisk = new BackEndApis.Models.Disk
-                    {
-                        IdProduct = idProduct.Value,
-                        Capacity = disk.capacity,
-                        Size = disk.size,
-                        Type = disk.type,
-                        ConnectionStd = disk.connectionStd,
-                        Speed = disk.speed,
-                        Warranty = disk.warranty,
-                        Catalogs = disk.catalogs,
-                        Details = disk.details,
-                    };
-
-                    _db.Disks.Add(aDisk);
-                    await _db.SaveChangesAsync();
-                    return "OK";
-                }
-                else
-                {
-                    return "Không tìm thấy idProduct";
-                }
-            }
-            catch
-            {
-                return "Lỗi server";
-            }
-        }// thêm thông tin chi tiết cho DISK*/
         #region CRUD Product
-        //=== thêm sản phẩm ===//
+
+        #region up image to cloudinary
         public async Task<string> upImageProduct_Avt(string avtBase64, string code)
         {
             try
@@ -198,7 +157,7 @@ namespace BackEndApis.Services
                 if (catalogs != null && catalogs.Length > 0)
                 {
                     // Set the folder path including the product code
-                    var folderPath = $"products/{code}";
+                    var folderPath = $"products/{code}/catalogs";
 
                     List<string> imageUrls = new List<string>();
 
@@ -240,59 +199,44 @@ namespace BackEndApis.Services
                 return "Lỗi server lưu ảnh";
             }
         }
-
-        public async Task<string[]> upImageDesc(Detail_Des[]? detailDescs, string code)
+        public async Task<string> upImageDesc(string imageBase64, string code)
         {
-            List<string> imageUrls = new List<string>();
-
             try
             {
-                // Check if the detailDescs array is not null
-                if (detailDescs != null)
+                // Upload ảnh lên Cloudinary
+                if (!string.IsNullOrEmpty(imageBase64))
                 {
                     // Set the folder path including the product code
-                    var folderPath = $"products/{code}";
+                    var folderPath = $"products/{code}/desc";
 
-                    foreach (var detailDesc in detailDescs)
+                    var uploadParams = new ImageUploadParams
                     {
-                        // Upload photo to Cloudinary
-                        if (!string.IsNullOrEmpty(detailDesc.photo))
-                        {
-                            var uploadParams = new ImageUploadParams
-                            {
-                                File = new FileDescription("image", new MemoryStream(Convert.FromBase64String(detailDesc.photo))),
-                                Folder = folderPath  // Set the folder path on Cloudinary
-                            };
-
-                            var uploadResult = await _cloudinary.UploadAsync(uploadParams);
-
-                            // Save the image URL to the urlPhoto property
-                            string imageUrl = uploadResult.SecureUrl.AbsoluteUri;
-                            imageUrls.Add(imageUrl);
-                        }
-                        else
-                        {
-                            imageUrls.Add("Lỗi lưu ảnh");
-                        }
-                    }
+                        File = new FileDescription("image", new MemoryStream(Convert.FromBase64String(imageBase64))),
+                        Folder = folderPath  // Set the folder path on Cloudinary
+                    };
+                    var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+                    // Lưu đường dẫn ảnh vào cơ sở dữ liệu
+                    string avt = uploadResult.SecureUrl.AbsoluteUri;
+                    return avt;
                 }
                 else
                 {
-                    imageUrls.Add("Danh sách detailDescs là null");
+                    return "Lỗi lưu ảnh";
                 }
             }
             catch
             {
-                imageUrls.Add("Lỗi server lưu ảnh");
+                return "Lỗi server lưu ảnh";
             }
+        } // up image Desc Product
+        #endregion
 
-            return imageUrls.ToArray();
-        }
-
+        #region Create Product
+        //=== thêm sản phẩm ===//
         public async Task<int?> addProducts(InfoProduct product, string urlAvt)
         {
             try
-            {    
+            {
                 BackEndApis.Models.Product addProduct = new BackEndApis.Models.Product
                 {
                     Code = product.code,
@@ -316,18 +260,16 @@ namespace BackEndApis.Services
                 return null;
             }
         } // thêm thông tin sản phẩm 
-        public async Task<int?> addDescs(int? idProduct, InfoDesc infoDesc)
+        public async Task<int?> addDescs(int? idProduct, InfoDescModel infoDesc, string content, string urlImage)
         {
             try
             {
-                // Convert array of Detail_Des to JSON string
-                string detailDesJson = JsonConvert.SerializeObject(infoDesc.detailDesList);
-
                 BackEndApis.Models.Description addDesc = new BackEndApis.Models.Description
                 {
                     IdProduct = idProduct,
                     Title = infoDesc.title,
-                    Description1 = detailDesJson,
+                    Description1 = content,
+                    Image = urlImage,
                 };
 
                 await _db.Descriptions.AddAsync(addDesc);
@@ -358,16 +300,108 @@ namespace BackEndApis.Services
                 _db.Rams.Add(aRam);
                 await _db.SaveChangesAsync();
                 return "OK";
-        }
+            }
             catch
             {
                 return "Lỗi server";
             }
         }// thêm thông tin chi tiết cho RAM
-        public async Task<ResultReturn> phanLoaiSP(string type, InfoProduct infoProduct, InfoDesc infoDesc, InfoDetailsModel infoDetail)
+        
+        public async Task<ResultReturn> AddDetailProduc(int? idProduct, string type, InfoDetailsModel detail, string urlCatalogs)
         {
             ResultReturn result = new ResultReturn();
-            if(string.IsNullOrEmpty(type) || type == "NULL" || type == "null" || type.ToLower() == "null")
+            var shareDetails = detail.shareDetails; // thông tin chung 
+            var prvDetails = detail.prvDetails; // thông tin riêng
+
+            switch (type)
+            {
+                case "ram":
+                    try
+                    {
+                        InfoRam infoRam = new InfoRam
+                        {
+                            warranty = shareDetails?.warranty ?? string.Empty,
+                            details = shareDetails?.details,
+                            capacity = prvDetails?.InfoRam?.capacity ?? string.Empty,
+                            bus = prvDetails?.InfoRam?.bus ?? string.Empty,
+                            type = prvDetails?.InfoRam?.type ?? string.Empty,
+                        };
+                        BackEndApis.Models.Ram aRam = new BackEndApis.Models.Ram
+                        {
+                            IdProduct = idProduct,
+                            Capacity = infoRam.capacity,
+                            Bus = infoRam.bus,
+                            Type = infoRam.type,
+
+                            Warranty = infoRam.warranty,
+                            Catalogs = urlCatalogs,
+                            Details = infoRam.details,
+                        };
+                        _db.Rams.Add(aRam);
+                        await _db.SaveChangesAsync();
+                        result.Code = 0;
+                        result.Message = "Thêm sản phẩm thành công";
+                    }
+                    catch
+                    {
+                        result.Code = 4;
+                        result.Message = "Lỗi lưu sản phẩm vào database";
+                    }
+                    break; // add detail Ram
+
+                case "disk":
+                    try
+                    {
+                        InfoDisk infoDisk = new InfoDisk
+                        {
+                            warranty = shareDetails?.warranty ?? string.Empty,
+                            details = shareDetails?.details,
+
+                            capacity = prvDetails?.InfoDisk?.capacity ?? string.Empty,
+                            size = prvDetails?.InfoDisk?.size ?? string.Empty,
+                            type = prvDetails?.InfoDisk?.type ?? string.Empty,
+                            connectionStd = prvDetails?.InfoDisk?.connectionStd ?? string.Empty,
+                            speed = prvDetails?.InfoDisk?.speed ?? string.Empty,
+                        };
+
+                        BackEndApis.Models.Disk aDisk = new BackEndApis.Models.Disk
+                        {
+                            IdProduct = idProduct,
+                            Capacity = infoDisk.capacity,
+                            Size = infoDisk.size,
+                            Type = infoDisk.type,
+                            ConnectionStd = infoDisk.connectionStd,
+                            Speed = infoDisk.speed,
+                            Warranty = infoDisk.warranty,
+                            Catalogs = urlCatalogs,
+                            Details = infoDisk.details,
+                        };
+                        _db.Disks.Add(aDisk);
+                        await _db.SaveChangesAsync();
+                        result.Code = 0;
+                        result.Message = "Thêm sản phẩm thành công";
+                    }
+                    catch
+                    {
+                        result.Code = 4;
+                        result.Message = "Lỗi lưu sản phẩm vào database";
+                    }
+                    break; // add detail Disk
+
+                case ""
+                default:
+                    result.Code = 7;
+                    result.Message = $"Không tìm thấy loại sản phẩm: {type}";
+                    return result;
+            }
+
+            return result;
+        }
+        
+        public async Task<ResultReturn> phanLoaiSP(string type, InfoProduct infoProduct, InfoDescModel infoDescModel, InfoDetailsModel infoDetail)
+        {
+            ResultReturn result = new ResultReturn();
+            if (string.IsNullOrEmpty(type) || type == "NULL" || type == "null" || type.ToLower() == "null")
             {
                 result.Code = 2;
                 result.Message = "Thiếu loại sản phẩm";
@@ -378,7 +412,7 @@ namespace BackEndApis.Services
                 // kiểm tra tồn tại của sản phẩm
                 var checkCodeProduct = await _db.Products.FirstOrDefaultAsync(ccode => ccode.Code == infoProduct.code);
                 if (checkCodeProduct == null)
-                { 
+                {
                     result.Code = 1;
                     result.Message = "Sản phẩm đã tồn tại";
                 }
@@ -391,14 +425,24 @@ namespace BackEndApis.Services
                 var prvDetails = infoDetail.prvDetails; // thông tin riêng
                 string urlCatalogs = await upImageCatalogs(shareDetails?.catalogs ?? Array.Empty<string>(), infoProduct.code);
 
-                // up load ảnh desc Product
-                string[] urlDesc = await upImageDesc(infoDesc.detailDesList, infoProduct.code);
-
                 // lưu Product vào database và lấy idProduct
                 int? idProduct = await addProducts(infoProduct, urlAvt);
-                
-                // lưu Desc của sản phẩm
-                int? addDesc = await addDescs(idProduct, infoDesc);
+
+                // lưu Desc của sản phẩm (up image lên cloudinary và xuống database)
+                if (infoDescModel != null)
+                {
+                    if (infoDescModel.detailDesList != null)
+                    {
+                        foreach (var detailDesc in infoDescModel.detailDesList)
+                        {
+                            if (detailDesc != null)
+                            {
+                                string urlImage = await upImageDesc(detailDesc.photo ?? "", infoProduct.code);
+                                int? addDesc = await addDescs(idProduct, infoDescModel, detailDesc.content ?? "", urlImage);
+                            }
+                        }
+                    }
+                }
 
                 if (urlAvt == "Lỗi lưu ảnh")
                 {
@@ -412,66 +456,27 @@ namespace BackEndApis.Services
                     result.Message = "Lỗi server lưu ảnh";
                     return result;
                 }
-                if (idProduct == -1 ||  addDesc == -1)
-                {
-                    result.Code = 3;
-                    result.Message = "Sản phẩm đã tồn tại";
-                    return result;
-                }
-                if(idProduct == 3 || addDesc == 3)
+                if (idProduct == 3)
                 {
                     result.Code = 4;
                     result.Message = "Lỗi lưu ảnh";
                     return result;
                 }
-                if(idProduct == 4 || addDesc == 4)
+                if (idProduct == 4)
                 {
                     result.Code = 5;
                     result.Message = "Lỗi server lưu ảnh";
                     return result;
                 }
-
-                switch (type)
-                {
-                    case "ram":
-                        InfoRam infoRam = new InfoRam
-                        {
-                            warranty = shareDetails?.warranty ?? string.Empty,
-                            catalogs = shareDetails?.catalogs ?? Array.Empty<string>(),
-                            details = shareDetails?.details,
-                            capacity = prvDetails?.InfoRam?.capacity ?? string.Empty,
-                            bus = prvDetails?.InfoRam?.bus ?? string.Empty,
-                            type = prvDetails?.InfoRam?.type ?? string.Empty,
-                        };
-
-                        string mes_add_ram = await AddRam(infoRam, idProduct, urlCatalogs);
-
-                        if(mes_add_ram == "OK")
-                        {
-                            result.Code = 0;
-                            result.Message = "Thêm sản phẩm thành công";
-                            return result;
-                        }
-                        break;
-
-                    case "disk":
-
-                        break;
-
-                    default:
-                        result.Code = 7;
-                        result.Message = $"Không tìm thấy loại sản phẩm: {type}";
-                        return result;
-                }
+                result = await AddDetailProduc(idProduct, type, infoDetail, urlCatalogs);
             }
             return result;
         }
-
-        public async Task<ResultReturn> PutAddProductServices(InfoProduct infoProduct, InfoDesc infoDesc, InfoDetailsModel infoDetail)
+        public async Task<ResultReturn> PutAddProductServices(InfoProduct infoProduct, InfoDescModel infoDesc, InfoDetailsModel infoDetail)
         {
             ResultReturn result = new ResultReturn();
-            
-            if (infoProduct == null || infoDesc == null || infoDetail == null )
+
+            if (infoProduct == null || infoDesc == null || infoDetail == null)
             {
                 result.Code = 1;
                 result.Message = "Thiếu thông tin sản phẩm";
@@ -479,7 +484,7 @@ namespace BackEndApis.Services
             }
 
             string type = infoProduct.type; // lấy loại sản phẩm
-            if(string.IsNullOrEmpty(type) || type == "NULL" || type == "null" || type.ToLower() == "null")
+            if (string.IsNullOrEmpty(type) || type == "NULL" || type == "null" || type.ToLower() == "null")
             {
                 result.Code = 2;
                 result.Message = "Thiếu loại sản phẩm";
@@ -490,6 +495,13 @@ namespace BackEndApis.Services
             result.Message = sw.Message;
             return result;
         }
+        #endregion
+
+        #region Read Product
+                
+
+        #endregion
+
         #endregion
     }
 }

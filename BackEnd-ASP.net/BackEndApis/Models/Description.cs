@@ -13,5 +13,6 @@ public partial class Description
 
     public string? Description1 { get; set; }
 
+    public string? Image {  get; set; }
     public virtual Product? IdProductNavigation { get; set; }
 }

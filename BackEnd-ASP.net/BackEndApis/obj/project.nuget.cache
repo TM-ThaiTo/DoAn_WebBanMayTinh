@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "03BsIDixuvY4ZwJEJSS0Zad9YBsd1bkCHRbHz2j5sGnNqPVm3RK6qaHr2etkmshbwZsCrblMvaYifAeOGuJ74Q==",
+  "dgSpecHash": "VC0iLo56EtTk3cSqVYkDrvB3zhbBPYi31Spj4Eobh8VasbN8r2xuWJDoTUfNecom/K4KjCqKIfA1FJ15mU5Dpg==",
   "success": true,
-  "projectFilePath": "E:\\DoAn_WebBanMayTinh\\BackEnd-ASP.net\\BackEndApis\\BackEndApis.csproj",
+  "projectFilePath": "E:\\HocTap\\Web\\DoAn_WebBanMayTinh\\BackEnd-ASP.net\\BackEndApis\\BackEndApis.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\cloudinarydotnet\\1.26.0\\cloudinarydotnet.1.26.0.nupkg.sha512",

@@ -11,7 +11,7 @@ namespace BackEndApis.Helper
             CreateMap<Info.ProductRequestModel, InfoProduct>();
 
             // map request Desc => infoDesc
-            CreateMap<Info.InfoDesc, InfoDesc>();
+            CreateMap<Info.InfoDescModel, InfoDescModel>();
 
             // map request.details => InfoDetailsModel
             CreateMap<Info.InfoDetailsModel, InfodescPrvDetails>();

@@ -57,17 +57,17 @@ namespace BackEndApis.Helper
         public class ProductRequestModel
         {
             public InfoProduct? product { get; set; }
-            public InfoDesc? desc { get; set; }
+            public InfoDescModel? desc { get; set; }
             public InfoDetailsModel? details { get; set; }
         }
 
         //=== desc Product ===//
-        public class InfoDesc
+        public class InfoDescModel
         {
             public string? title { get; set; }
-            public Detail_Des[]? detailDesList { get; set; }
+            public Detail_DesModel[]? detailDesList { get; set; }
         }
-        public class Detail_Des
+        public class Detail_DesModel
         {
             public string? content { get; set; }
             public string? urlPhoto { get; set; }
@@ -139,7 +139,7 @@ namespace BackEndApis.Helper
             // vd: {key: 'ưu đãi kèm theo', value: 'Một con chuột không dây'}
             public string other_info { get; set; } = string.Empty;
         }
-        
+
         //=== details Product ===//
         public class InfoDetail
         {

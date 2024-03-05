@@ -517,44 +517,12 @@ namespace BackEndApis.Controllers
         #endregion
 
         #region CRUD product
-        [HttpPost("upload-images")]
-        public async Task<IActionResult> UploadImages([FromForm] List<IFormFile> images)
-        {
-            if (images == null || images.Count == 0)
-            {
-                return BadRequest("No images selected for upload");
-            }
-
-            // Đường dẫn lưu trữ cụ thể
-            var uploadPath = @"E:\image_doan\image";
-
-            foreach (var image in images)
-            {
-                if (image == null || image.Length == 0)
-                {
-                    // Bỏ qua tệp tin không hợp lệ
-                    continue;
-                }
-
-                // Tạo đường dẫn đầy đủ để lưu trữ file
-                var filePath = Path.Combine(uploadPath, image.FileName);
-
-                // Xử lý lưu trữ file ảnh ở đây
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await image.CopyToAsync(stream);
-                }
-            }
-
-            return Ok("Images uploaded successfully");
-        }
-
         //=== POST add-product (Thêm 1 sản phẩm) ===//
         [HttpPost("products/add")]
         public async Task<IActionResult> PostAddProducts([FromBody] Info.ProductRequestModel request)
         {
             InfoProduct infoProduct = _mapper.Map<InfoProduct>(request.product);
-            InfoDesc infoDesc = _mapper.Map<InfoDesc>(request.desc);
+            InfoDescModel infoDesc = _mapper.Map<InfoDescModel>(request.desc);
             InfoDetailsModel infoDetail = _mapper.Map<InfoDetailsModel>(request.details);
 
             Info.ResultReturn a = await _sc.AdminServices.PutAddProductServices(infoProduct, infoDesc, infoDetail);
