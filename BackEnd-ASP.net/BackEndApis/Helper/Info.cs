@@ -236,6 +236,8 @@ namespace BackEndApis.Helper
             public int? id_product { get; set; }
             // dung lượng tính theo GB
             public string capacity { get; set; } = string.Empty;
+            // nhà sản xuất
+            public string manufactuner {  get; set; } = string.Empty;
         }
 
         //=== thông tin mainboard ===//

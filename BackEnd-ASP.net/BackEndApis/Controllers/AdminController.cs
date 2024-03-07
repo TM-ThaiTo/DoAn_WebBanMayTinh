@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using static BackEndApis.Helper.Info;
 
 namespace BackEndApis.Controllers
@@ -536,15 +538,465 @@ namespace BackEndApis.Controllers
 
         //=== GET (lấy danh sách sản phẩm) ===//
         [HttpGet("products")]
-        public IActionResult GetProducts()
+        public async Task<IActionResult> GetProducts([FromQuery] int? id)
         {
-            return Ok(new
+            if (id.HasValue)
             {
-                code = 0,
-                message = "Lấy thông tin sản phẩm thành công",
-            });
-        }
+                var product = await _db.Products
+                    .Where(p => p.Id == id.Value)
+                    .Select(u => new Info.InfoProduct
+                    {
+                        id_product = u.Id,
+                        code = u.Code!,
+                        name = u.Name!,
+                        price = Convert.ToInt32(u.Price),
+                        type = u.Type!,
+                        brand = u.Brand!,
+                        avt = u.Avt!,
+                        stock = u.Stock,
+                        discount = u.Discount!,
+                        rate = u.Rate,
+                        other_info = u.OtherInfo!,
+                    })
+                    .FirstOrDefaultAsync();
 
+                if (product == null)
+                {
+                    return Ok(new
+                    {
+                        code = 1,
+                        message = "Không tìm thấy sản phẩm",
+                    });
+                }
+
+                var descProduct = await _db.Descriptions
+                    .Where(d => d.IdProduct == product.id_product)
+                    .GroupBy(d => d.Title)
+                    .Select(group => new InfoDescModel
+                    {
+                        title = group.Key,
+                        detailDesList = group.Select(detail => new Detail_DesModel
+                        {
+                            content = detail.Description1,
+                            photo = detail.Image,
+                        }).ToArray()
+                    })
+                    .ToListAsync();
+
+                string type = product.type;
+                object detailData;
+
+                // lấy chi tiết sản phẩm
+                switch (type)
+                {
+                    #region
+                    case "ram":
+                        var ramDetail = await _db.Rams
+                            .Where(r => r.IdProduct == product.id_product)
+                            .Select(r => new
+                            {
+                                id_product = r.IdProduct,
+                                warranty = r.Warranty ?? string.Empty,
+                                details = r.Details,
+                                capacity = r.Capacity ?? string.Empty,
+                                linkCatalogs = r.Catalogs ?? string.Empty,
+                                bus = r.Bus ?? string.Empty,
+                                type = r.Type ?? string.Empty,
+                            })
+                            .ToListAsync();
+
+                        var catalogsTasks = ramDetail.Select(async r => new InfoRam
+                        {
+                            id_product = r.id_product,
+                            warranty = r.warranty,
+                            details = r.details,
+                            capacity = r.capacity,
+                            catalogs = await _sc.AdminServices.TachLinkImage(r.linkCatalogs),
+                            bus = r.bus,
+                            type = r.type,
+                        }).ToArray();
+
+                        await Task.WhenAll(catalogsTasks);
+
+                        detailData = catalogsTasks.Select(x => x.Result).FirstOrDefault()!;
+                        break; // Ram
+
+                    case "disk":
+                        var diskDetail = await _db.Disks
+                            .Where(d => d.IdProduct == product.id_product)
+                            .Select(d => new
+                            {
+                                id_product = d.IdProduct,
+                                warranty = d.Warranty ?? string.Empty,
+                                details = d.Details,
+                                capacity = d.Capacity ?? string.Empty,
+                                linkCatalogs = d.Catalogs ?? string.Empty,
+                                size = d.Size ?? string.Empty,
+                                type = d.Type ?? string.Empty,
+                                connectionStd = d.ConnectionStd ?? string.Empty,
+                                speed = d.Speed ?? string.Empty,
+                            })
+                            .ToListAsync();
+
+                        var catalogsTasksDisk = diskDetail.Select(async d => new InfoDisk
+                        {
+                            id_product = d.id_product,
+                            warranty = d.warranty,
+                            details = d.details,
+                            capacity = d.capacity,
+                            linkCatalogs = d.linkCatalogs,
+                            size = d.size,
+                            type = d.type,
+                            connectionStd = d.connectionStd,
+                            speed = d.speed,
+                            catalogs = await _sc.AdminServices.TachLinkImage(d.linkCatalogs),
+                        }).ToArray();
+
+                        await Task.WhenAll(catalogsTasksDisk);
+
+                        detailData = catalogsTasksDisk.Select(x => x.Result).FirstOrDefault()!;
+                        break; // Disk
+
+                    case "laptop":
+                        var laptopDetail = await _db.Laptops
+                            .Where(l => l.IdProduct == product.id_product)
+                            .Select(l => new
+                            {
+                                id_product = l.IdProduct,
+                                warranty = l.Warranty ?? string.Empty,
+                                details = l.Details,
+                                linkCatalog = l.Catalogs ?? string.Empty,
+
+                                cpu = l.Cpu ?? string.Empty,
+                                displaySize = l.DisplaySize ?? string.Empty,
+                                display = l.Display ?? string.Empty,
+                                operating = l.Operating ?? string.Empty,
+                                disk = l.Disk ?? string.Empty,
+                                ram = l.Ram ?? string.Empty,
+                                pin = l.Pin ?? string.Empty,
+                                weight = l.Weight ?? string.Empty,
+                            }).ToListAsync();
+
+                        var catalogsTasksLap = laptopDetail.Select(async l => new InfoLaptop
+                        {
+                            id_product = l.id_product,
+                            warranty = l.warranty,
+                            details = l.details,
+                            catalogs = await _sc.AdminServices.TachLinkImage(l.linkCatalog),
+
+                            cpu = l.cpu ?? string.Empty,
+                            displaySize = l.displaySize ?? string.Empty,
+                            display = l.display ?? string.Empty,
+                            operating = l.operating ?? string.Empty,
+                            disk = l.disk ?? string.Empty,
+                            ram = l.ram ?? string.Empty,
+                            pin = l.pin ?? string.Empty,
+                            weight = l.weight ?? string.Empty,
+                        }).ToArray();
+
+                        await Task.WhenAll(catalogsTasksLap);
+
+                        detailData = catalogsTasksLap.Select(x => x.Result).FirstOrDefault()!;
+                        break; // Laptop
+
+                    case "display":
+                        var displayDetail = await _db.Displays
+                            .Where(l => l.IdProduct == product.id_product)
+                            .Select(l => new
+                            {
+                                id_product = l.IdProduct,
+                                warranty = l.Warranty ?? string.Empty,
+                                details = l.Details,
+                                linkCatalog = l.Catalogs ?? string.Empty,
+
+                                capacity = l.Capacity ?? string.Empty,
+                                manufactuner = l.Manufacturer ?? string.Empty,
+                            }).ToListAsync();
+                        var catalogsTasksDisplay = displayDetail.Select(async l => new InfoDisplay
+                        {
+                            id_product = l.id_product,
+                            warranty = l.warranty,
+                            details = l.details,
+                            catalogs = await _sc.AdminServices.TachLinkImage(l.linkCatalog),
+
+                            capacity = l.capacity ?? string.Empty,
+                            manufactuner = l.manufactuner ?? string.Empty,
+                        }).ToArray();
+
+                        await Task.WhenAll(catalogsTasksDisplay);
+
+                        detailData = catalogsTasksDisplay.Select(x => x.Result).FirstOrDefault()!;
+                        break; // Display
+
+                    case "mainboard":
+                        var mainboardDetail = await _db.Mainboards
+                            .Where(l => l.IdProduct == product.id_product)
+                            .Select(l => new
+                            {
+                                id_product = l.IdProduct,
+                                warranty = l.Warranty ?? string.Empty,
+                                details = l.Details,
+                                linkCatalog = l.Catalogs ?? string.Empty,
+
+                                chipset = l.Chipset ?? string.Empty,
+                                series = l.Series ?? string.Empty,
+                                socketType = l.SocketType ?? string.Empty,
+                                sizeStd = l.SizeStd ?? string.Empty,
+                            }).ToListAsync();
+                        var catalogsTasksMain = mainboardDetail.Select(async l => new InfoMainBoard
+                        {
+                            id_product = l.id_product,
+                            warranty = l.warranty,
+                            details = l.details,
+                            catalogs = await _sc.AdminServices.TachLinkImage(l.linkCatalog),
+
+                            chipset = l.chipset ?? string.Empty,
+                            series = l.series ?? string.Empty,
+                            socketType = l.socketType ?? string.Empty,
+                            sizeStd = l.sizeStd ?? string.Empty,
+                        }).ToArray();
+
+                        await Task.WhenAll(catalogsTasksMain);
+
+                        detailData = catalogsTasksMain.Select(x => x.Result).FirstOrDefault()!;
+                        break; // mainboard
+                    #endregion
+
+                    #region phụ kiện
+                    case "headphone":
+                        var headphoneDetail = await _db.Headphones
+                            .Where(l => l.IdProduct == product.id_product)
+                            .Select(l => new
+                            {
+                                id_product = l.IdProduct,
+                                warranty = l.Warranty ?? string.Empty,
+                                details = l.Details,
+                                linkCatalog = l.Catalogs ?? string.Empty,
+
+                                type = l.Type ?? string.Empty,
+                                connectionStd = l.ConnectionStd ?? string.Empty,
+                            }).ToListAsync();
+                        var catalogsTasksHead = headphoneDetail.Select(async l => new InfoHeadphone
+                        {
+                            id_product = l.id_product,
+                            warranty = l.warranty,
+                            details = l.details,
+                            catalogs = await _sc.AdminServices.TachLinkImage(l.linkCatalog),
+
+                            type = l.type ?? string.Empty,
+                            connectionStd = l.connectionStd ?? string.Empty,
+                        }).ToArray();
+
+                        await Task.WhenAll(catalogsTasksHead);
+
+                        detailData = catalogsTasksHead.Select(x => x.Result).FirstOrDefault()!;
+                        break; //  headphone
+
+                    case "keyboard":
+                        var keyboardDetail = await _db.Keyboards
+                            .Where(l => l.IdProduct == product.id_product)
+                            .Select(l => new
+                            {
+                                id_product = l.IdProduct,
+                                warranty = l.Warranty ?? string.Empty,
+                                details = l.Details,
+                                linkCatalog = l.Catalogs ?? string.Empty,
+
+                                type = l.Type ?? string.Empty,
+                                color = l.Color ?? string.Empty,
+                                ledColor = l.LedColor ?? string.Empty,
+                            }).ToListAsync();
+                        var catalogsTaskskeyboard = keyboardDetail.Select(async l => new InfoKeyboard
+                        {
+                            id_product = l.id_product,
+                            warranty = l.warranty,
+                            details = l.details,
+                            catalogs = await _sc.AdminServices.TachLinkImage(l.linkCatalog),
+
+                            type = l.type ?? string.Empty,
+                            color = l.color ?? string.Empty,
+                            ledColor = l.ledColor ?? string.Empty,
+                        }).ToArray();
+
+                        await Task.WhenAll(catalogsTaskskeyboard);
+
+                        detailData = catalogsTaskskeyboard.Select(x => x.Result).FirstOrDefault()!;
+                        break; // keyboard
+
+                    case "monitor":
+                        var monitorDetail = await _db.Monitors
+                             .Where(l => l.IdProduct == product.id_product)
+                             .Select(l => new
+                             {
+                                 id_product = l.IdProduct,
+                                 warranty = l.Warranty ?? string.Empty,
+                                 details = l.Details,
+                                 linkCatalog = l.Catalogs ?? string.Empty,
+
+                                 bgPlate = l.BgPlate ?? string.Empty,
+                                 resolution = l.Resolution ?? string.Empty,
+                                 displaySize = l.DisplaySize ?? string.Empty,
+                                 frequency = l.Frequency ?? string.Empty,
+                                 port = l.Port ?? string.Empty,
+                             }).ToListAsync();
+                        var catalogsTasksmonitor = monitorDetail.Select(async l => new InfoMonitor
+                        {
+                            id_product = l.id_product,
+                            warranty = l.warranty,
+                            details = l.details,
+                            catalogs = await _sc.AdminServices.TachLinkImage(l.linkCatalog),
+
+                            bgPlate = l.bgPlate ?? string.Empty,
+                            resolution = l.resolution ?? string.Empty,
+                            displaySize = l.displaySize ?? string.Empty,
+                            frequency = l.frequency ?? string.Empty,
+                            port = l.port ?? string.Empty,
+                        }).ToArray();
+
+                        await Task.WhenAll(catalogsTasksmonitor);
+
+                        detailData = catalogsTasksmonitor.Select(x => x.Result).FirstOrDefault()!;
+                        break; //  monitor
+
+                    case "mouse":
+                        var mouseDetail = await _db.Mouses
+                              .Where(l => l.IdProduct == product.id_product)
+                              .Select(l => new
+                              {
+                                  id_product = l.IdProduct,
+                                  warranty = l.Warranty ?? string.Empty,
+                                  details = l.Details,
+                                  linkCatalog = l.Catalogs ?? string.Empty,
+
+                                  type = l.Type ?? string.Empty,
+                                  isLed = l.IsLed ?? string.Empty,
+                              }).ToListAsync();
+                        var catalogsTasksmouse = mouseDetail.Select(async l => new InfoMouse
+                        {
+                            id_product = l.id_product,
+                            warranty = l.warranty,
+                            details = l.details,
+                            catalogs = await _sc.AdminServices.TachLinkImage(l.linkCatalog),
+
+                            type = l.type ?? string.Empty,
+                            isLed = l.isLed ?? string.Empty,
+                        }).ToArray();
+
+                        await Task.WhenAll(catalogsTasksmouse);
+
+                        detailData = catalogsTasksmouse.Select(x => x.Result).FirstOrDefault()!;
+                        break; //  mouse
+
+                    case "router":
+                        var routerDetail = await _db.Routers
+                               .Where(l => l.IdProduct == product.id_product)
+                               .Select(l => new
+                               {
+                                   id_product = l.IdProduct,
+                                   warranty = l.Warranty ?? string.Empty,
+                                   details = l.Details,
+                                   linkCatalog = l.Catalogs ?? string.Empty,
+
+                                   bandwidth = l.Bandwidth ?? string.Empty,
+                                   strong = l.Strong ?? string.Empty,
+                                   numberOfPort = l.NumberOfPort ?? string.Empty,
+                               }).ToListAsync();
+                        var catalogsTasksrouter = routerDetail.Select(async l => new InfoRouter
+                        {
+                            id_product = l.id_product,
+                            warranty = l.warranty,
+                            details = l.details,
+                            catalogs = await _sc.AdminServices.TachLinkImage(l.linkCatalog),
+
+                            bandwidth = l.bandwidth ?? string.Empty,
+                            strong = l.strong ?? string.Empty,
+                            numberOfPort = l.numberOfPort ?? string.Empty,
+                        }).ToArray();
+
+                        await Task.WhenAll(catalogsTasksrouter);
+
+                        detailData = catalogsTasksrouter.Select(x => x.Result).FirstOrDefault()!;
+                        break; //  router 
+
+                    case "speaker":
+                        var speakerDetail = await _db.Speakers
+                              .Where(l => l.IdProduct == product.id_product)
+                              .Select(l => new
+                              {
+                                  id_product = l.IdProduct,
+                                  warranty = l.Warranty ?? string.Empty,
+                                  details = l.Details,
+                                  linkCatalog = l.Catalogs ?? string.Empty,
+
+                                  wattage = l.Wattage ?? string.Empty,
+                                  connectionPort = l.ConnectionPort ?? string.Empty,
+                              }).ToListAsync();
+                        var catalogsTasksspeaker = speakerDetail.Select(async l => new InfoSpeaker
+                        {
+                            id_product = l.id_product,
+                            warranty = l.warranty,
+                            details = l.details,
+                            catalogs = await _sc.AdminServices.TachLinkImage(l.linkCatalog),
+
+                            wattage = l.wattage ?? string.Empty,
+                            connectionPort = l.connectionPort ?? string.Empty,
+                        }).ToArray();
+
+                        await Task.WhenAll(catalogsTasksspeaker);
+
+                        detailData = catalogsTasksspeaker.Select(x => x.Result).FirstOrDefault()!;
+                        break; //  speaker
+                    #endregion
+                    // Add more cases for other product types if needed
+                    default:
+                        return Ok(new
+                        {
+                            code = 2,
+                            message = "Không tìm thấy detail sản phẩm",
+                        });
+                }
+
+                return Ok(new
+                {
+                    code = 0,
+                    product = product,
+                    desc = descProduct,
+                    detail = detailData,
+                });
+            }
+            else
+            {
+                try
+                {
+                    var products = _db.Products.Select(u => new Info.InfoProduct
+                    {
+                        id_product = u.Id,
+                        code = u.Code!,
+                        name = u.Name!,
+                        price = Convert.ToInt32(u.Price),
+                        type = u.Type!,
+                        brand = u.Brand!,
+                        avt = u.Avt!,
+                        stock = u.Stock,
+                        discount = u.Discount!,
+                        rate = u.Rate,
+                        other_info = u.OtherInfo!,
+                    }).ToList();
+
+                    return Ok(new
+                    {
+                        code = 0,
+                        data = products
+                    });
+                }
+                catch
+                {
+                    // Log the exception or handle it appropriately
+                    return StatusCode(500, "Internal server error");
+                }
+            }
+        }
+        
         //=== PUT update-product (chỉnh sửa thông tin sản phẩm) ===//
         [HttpPut("products/up-product")]
         public IActionResult PutUpdateProduct()
@@ -557,13 +1009,22 @@ namespace BackEndApis.Controllers
         }
 
         //=== DELETE del-product (xóa sản phẩm) ===//
-        [HttpDelete("products/del-product")]
-        public IActionResult DeleteProduct()
+        [HttpDelete("product/del-product")]
+        public async Task<IActionResult> DeleteProduct([FromQuery] int? idProduct)
         {
+            if (idProduct <= 0)
+            {
+                return Ok(new
+                {
+                    code = 0,
+                    message = "Không tìm thấy id cần xóa"
+                });
+            }
+            Info.ResultReturn a = await _sc.AdminServices.DeleteProduct(idProduct);
             return Ok(new
             {
-                code = 0,
-                message = "Xóa sản phẩm thành công",
+                code = a.Code,
+                message = a.Message,
             });
         }
         #endregion
