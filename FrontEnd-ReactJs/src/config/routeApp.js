@@ -19,6 +19,10 @@ import NotFound from '../components/NotFound/NotFound.js';
 // const NotFound = React.lazy(() => import('../components/NotFound/NotFound.js'));
 
 import Product_View from '../components/Product/ProductView/Product_View';
+
+
+
+import AdminPage from '../containers/AdminPage/index.js';
 const routes = [
     //=== route ADMIN ===>
     // {
@@ -77,6 +81,11 @@ const routes = [
         path: PATH.ALL_PRODUCT,
         exact: true,
         main: () => <AllProduct />
+    },
+    {
+        path: "/test_adminpage",
+        exact: true,
+        main: () => <AdminPage />
     },
 ];
 

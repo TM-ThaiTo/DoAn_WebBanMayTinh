@@ -55,13 +55,9 @@ class Login extends Component {
         //         }
         //     }
         // }
-        let res = await handleLoginApi(this.state.username, this.state.password);
-        console.log("Check res: ", res);
-        // Giải mã chuỗi JSON
-        console.log("Check message: ", res.message);
-        // let dataObject = JSON.parse(res.data);
-        console.log("Check message:", res.data.email);
-
+        // let res = await handleLoginApi(this.state.username, this.state.password);
+        // console.log("Check res: ", res);
+        this.props.userLoginSuccess("OK");
         // // Truy cập các thuộc tính bên trong
         // console.log("Check email: ", dataObject.Email);
     }
