@@ -17,7 +17,9 @@ public partial class Disk
 
     public string? ConnectionStd { get; set; }
 
-    public string? Speed { get; set; }
+    public int? readSpeed { get; set; }
+    public int? writeSpeed { get; set; }
+    public int? rpm { get; set; }
 
     public string? Warranty { get; set; }
 

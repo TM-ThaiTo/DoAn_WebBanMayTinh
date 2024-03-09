@@ -431,10 +431,15 @@ public partial class DbWebBanMayTinhContext : DbContext
                 .HasMaxLength(255)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnName("size");
-            entity.Property(e => e.Speed)
-                .HasMaxLength(255)
-                .HasDefaultValueSql("'NULL'")
-                .HasColumnName("speed");
+            entity.Property(e => e.readSpeed)
+                .HasColumnType("int(11)")
+                .HasColumnName("readSpeed");
+            entity.Property(e => e.writeSpeed)
+                .HasColumnType("int(11)")
+                .HasColumnName("writeSpeed");
+            entity.Property(e => e.rpm)
+            .HasColumnType("int(11)")
+                .HasColumnName("rpm");
             entity.Property(e => e.Type)
                 .HasMaxLength(255)
                 .HasDefaultValueSql("'NULL'")
@@ -633,10 +638,24 @@ public partial class DbWebBanMayTinhContext : DbContext
                 .HasMaxLength(255)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnName("catalogs");
-            entity.Property(e => e.Cpu)
+            
+            entity.Property(e => e.chipBrand)
                 .HasMaxLength(255)
                 .HasDefaultValueSql("'NULL'")
-                .HasColumnName("cpu");
+                .HasColumnName("chipBrand");
+            entity.Property(e => e.processorCount)
+                .HasMaxLength(255)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnName("processorCount");
+            entity.Property(e => e.series)
+                .HasMaxLength(255)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnName("series");
+            entity.Property(e => e.detailCpu)
+                .HasMaxLength(255)
+                .HasDefaultValueSql("'NULL'")
+                .HasColumnName("detailCpu");
+
             entity.Property(e => e.Details)
                 .HasDefaultValueSql("'NULL'")
                 .HasColumnType("int(11)")

@@ -121,15 +121,18 @@ namespace BackEndApis.Services
         {
             try
             {
-                // Upload ảnh lên Cloudinary
-                if (!string.IsNullOrEmpty(avtBase64))
+                // Check if the input is not empty and contains the expected format
+                if (!string.IsNullOrEmpty(avtBase64) && avtBase64.StartsWith("data:image/jpeg;base64,"))
                 {
+                    // Extract the base64 content by removing the prefix
+                    string base64Content = avtBase64.Replace("data:image/jpeg;base64,", "");
+
                     // Set the folder path including the product code
                     var folderPath = $"products/{code}";
 
                     var uploadParams = new ImageUploadParams
                     {
-                        File = new FileDescription("image", new MemoryStream(Convert.FromBase64String(avtBase64))),
+                        File = new FileDescription("image", new MemoryStream(Convert.FromBase64String(base64Content))),
                         Folder = folderPath  // Set the folder path on Cloudinary
                     };
 
@@ -141,15 +144,15 @@ namespace BackEndApis.Services
                 }
                 else
                 {
-                    return "Lỗi lưu ảnh";
+                    return "Invalid base64 format";
                 }
             }
             catch
             {
-                return "Lỗi server lưu ảnh";
+                return "Error uploading image to server";
             }
         } // up image Avatar Product
-        public async Task<string> upImageCatalogs(string[] catalogs, string code) // up image Catalogs Product
+        public async Task<string> upImageCatalogs(string[] catalogs, string code)
         {
             try
             {
@@ -163,12 +166,15 @@ namespace BackEndApis.Services
 
                     foreach (var avtBase64 in catalogs)
                     {
-                        // Upload ảnh lên Cloudinary
-                        if (!string.IsNullOrEmpty(avtBase64))
+                        // Check if the avtBase64 is not empty and starts with the expected format
+                        if (!string.IsNullOrEmpty(avtBase64) && avtBase64.StartsWith("data:image/jpeg;base64,"))
                         {
+                            // Extract the base64 content by removing the prefix
+                            string base64Content = avtBase64.Replace("data:image/jpeg;base64,", "");
+
                             var uploadParams = new ImageUploadParams
                             {
-                                File = new FileDescription("image", new MemoryStream(Convert.FromBase64String(avtBase64))),
+                                File = new FileDescription("image", new MemoryStream(Convert.FromBase64String(base64Content))),
                                 Folder = folderPath  // Set the folder path on Cloudinary
                             };
 
@@ -180,7 +186,7 @@ namespace BackEndApis.Services
                         }
                         else
                         {
-                            imageUrls.Add("Lỗi lưu ảnh");
+                            imageUrls.Add("Invalid base64 format");
                         }
                     }
 
@@ -203,17 +209,21 @@ namespace BackEndApis.Services
         {
             try
             {
-                // Upload ảnh lên Cloudinary
-                if (!string.IsNullOrEmpty(imageBase64))
+                // Check if the imageBase64 is not empty and starts with the expected format
+                if (!string.IsNullOrEmpty(imageBase64) && imageBase64.StartsWith("data:image/jpeg;base64,"))
                 {
+                    // Extract the base64 content by removing the prefix
+                    string base64Content = imageBase64.Replace("data:image/jpeg;base64,", "");
+
                     // Set the folder path including the product code
                     var folderPath = $"products/{code}/desc";
 
                     var uploadParams = new ImageUploadParams
                     {
-                        File = new FileDescription("image", new MemoryStream(Convert.FromBase64String(imageBase64))),
+                        File = new FileDescription("image", new MemoryStream(Convert.FromBase64String(base64Content))),
                         Folder = folderPath  // Set the folder path on Cloudinary
                     };
+
                     var uploadResult = await _cloudinary.UploadAsync(uploadParams);
                     // Lưu đường dẫn ảnh vào cơ sở dữ liệu
                     string avt = uploadResult.SecureUrl.AbsoluteUri;
@@ -221,7 +231,7 @@ namespace BackEndApis.Services
                 }
                 else
                 {
-                    return "Lỗi lưu ảnh";
+                    return "Invalid base64 format";
                 }
             }
             catch
@@ -355,7 +365,9 @@ namespace BackEndApis.Services
                             size = prvDetails?.InfoDisk?.size ?? string.Empty,
                             type = prvDetails?.InfoDisk?.type ?? string.Empty,
                             connectionStd = prvDetails?.InfoDisk?.connectionStd ?? string.Empty,
-                            speed = prvDetails?.InfoDisk?.speed ?? string.Empty,
+                            readSpeed = prvDetails?.InfoDisk?.readSpeed,
+                            writeSpeed = prvDetails?.InfoDisk?.writeSpeed,
+                            rpm = prvDetails?.InfoDisk?.rpm,
                         };
 
                         BackEndApis.Models.Disk aDisk = new BackEndApis.Models.Disk
@@ -368,7 +380,9 @@ namespace BackEndApis.Services
                             Size = infoDisk.size,
                             Type = infoDisk.type,
                             ConnectionStd = infoDisk.connectionStd,
-                            Speed = infoDisk.speed,
+                            readSpeed = infoDisk.readSpeed, 
+                            writeSpeed = infoDisk.writeSpeed,
+                            rpm = infoDisk.rpm,
                             Catalogs = urlCatalogs,
                         };
 
@@ -392,7 +406,11 @@ namespace BackEndApis.Services
                             warranty = shareDetails?.warranty ?? string.Empty,
                             details = shareDetails?.details,
 
-                            cpu = prvDetails?.InfoLaptop?.cpu ?? string.Empty,
+                            chipBrand = prvDetails?.InfoLaptop?.chipBrand ?? string.Empty,
+                            processorCount = prvDetails?.InfoLaptop?.processorCount ?? string.Empty,
+                            series = prvDetails?.InfoLaptop?.series ?? string.Empty,
+                            detailCpu = prvDetails?.InfoLaptop?.detailCpu ?? string.Empty,
+
                             displaySize = prvDetails?.InfoLaptop?.displaySize ?? string.Empty,
                             display = prvDetails?.InfoLaptop?.display ?? string.Empty,
                             operating = prvDetails?.InfoLaptop?.operating ?? string.Empty,
@@ -408,7 +426,11 @@ namespace BackEndApis.Services
                             Details = infoLaptop.details,
                             Warranty = infoLaptop.warranty,
 
-                            Cpu = infoLaptop.cpu,
+                            chipBrand = infoLaptop.chipBrand,
+                            processorCount = infoLaptop.processorCount,
+                            series = infoLaptop.series,
+                            detailCpu = infoLaptop.detailCpu,
+
                             DisplaySize = infoLaptop.displaySize,
                             Display = infoLaptop.display,
                             Operating = infoLaptop.operating,

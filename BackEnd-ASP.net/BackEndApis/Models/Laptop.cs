@@ -9,7 +9,10 @@ public partial class Laptop
 
     public int? IdProduct { get; set; }
 
-    public string? Cpu { get; set; }
+    public string? chipBrand { get; set; }
+    public string? processorCount { get; set; }
+    public string? series {  get; set; }
+    public string? detailCpu {  get; set; }
 
     public string? DisplaySize { get; set; }
 

@@ -192,7 +192,9 @@ namespace BackEndApis.Helper
             // tốc độ vòng xoay tính theo RPM
             rpm: { type: Number, default: 1500 },
                 },*/
-            public string speed { get; set; } = string.Empty;
+            public int? readSpeed { get; set; }
+            public int? writeSpeed {  get; set; }
+            public int? rpm { get; set; }
         }
 
         //=== thông tin laptop ===//
@@ -212,7 +214,11 @@ namespace BackEndApis.Helper
                 // 9750H up to 4.5 GHz
                 detail: { type: String, trim: true },
             },*/
-            public string cpu { get; set; } = string.Empty;
+            public string chipBrand { get; set; } = string.Empty;
+            public string processorCount { get; set; } = string.Empty;
+            public string series { get; set; } = string.Empty;
+            public string detailCpu { get; set; } = string.Empty;
+
             // độ phần giải màn hình: 15.6" (1920 x 1080), 60Hz
             public string displaySize { get; set; } = string.Empty;
             // card màn hình: NVIDIA GeForce RTX 2080 Super 8GB GDDR6

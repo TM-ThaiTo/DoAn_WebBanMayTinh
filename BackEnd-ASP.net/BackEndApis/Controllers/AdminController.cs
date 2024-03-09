@@ -19,17 +19,74 @@ namespace BackEndApis.Controllers
     {
         private readonly ServicesContex _sc;
         private readonly DbWebBanMayTinhContext _db;
+        private readonly HashPassword _hp;
         private readonly Info _info;
 
         private readonly IMapper _mapper;
 
-        public AdminController(ServicesContex sc, DbWebBanMayTinhContext db, Info info, IMapper mapper)
+        public AdminController(ServicesContex sc, DbWebBanMayTinhContext db, Info info, IMapper mapper, HashPassword hp)
         {
             _sc = sc;
             _db = db;
             _info = info;
             _mapper = mapper;
+            _hp = hp;
         }
+
+        #region Login Admin
+        [HttpPost("login-admin")]
+        public async Task<IActionResult> PostLoginAdmin([FromBody] InfoLogin login)
+        {
+            if (login == null || string.IsNullOrWhiteSpace(login.Email) || string.IsNullOrWhiteSpace(login.Password))
+            {
+                return Ok(new
+                {
+                    code = 1,
+                    message = "Thiếu thông tin đăng nhập",
+                });
+            }
+
+            var checkAdmin = await _db.Admins.FirstOrDefaultAsync(ad => ad.UserName == login.Email);
+            if(checkAdmin == null)
+            {
+                return Ok(new
+                {
+                    code = 2,
+                    message = "Không tìm thấy tài khoản",
+                });
+            }
+
+            string hashPass = _hp.hashPassword(login.Password);
+
+            if(hashPass != checkAdmin.Password)
+            {
+                return Ok(new
+                {
+                    code = 3,
+                    message = "Sai mật khẩu",
+                });
+            }
+
+            InfoAdmin infoAdmin = new InfoAdmin
+            {
+                id = checkAdmin.Id,
+                userName = checkAdmin.UserName ?? string.Empty,
+                Email = checkAdmin.Email ?? string.Empty,
+                fullName = checkAdmin.FullName ?? string.Empty,
+                age = checkAdmin.Age ?? 0,
+                phone = checkAdmin.Phone ?? string.Empty,
+                fb = checkAdmin.Fb ?? string.Empty,
+                address = checkAdmin.Address ?? string.Empty,
+            };
+
+            return Ok(new
+            {
+                code = 0,
+                message = "Đăng nhập thành công với admin",
+                data = infoAdmin,
+            });
+        }
+        #endregion
 
         #region CRUD tài khoản Admin
         //=== POST add-admin ===//
@@ -634,7 +691,9 @@ namespace BackEndApis.Controllers
                                 size = d.Size ?? string.Empty,
                                 type = d.Type ?? string.Empty,
                                 connectionStd = d.ConnectionStd ?? string.Empty,
-                                speed = d.Speed ?? string.Empty,
+                                readSpeed = d.readSpeed,
+                                writeSpeed = d.writeSpeed,
+                                rpm = d.rpm,
                             })
                             .ToListAsync();
 
@@ -648,7 +707,9 @@ namespace BackEndApis.Controllers
                             size = d.size,
                             type = d.type,
                             connectionStd = d.connectionStd,
-                            speed = d.speed,
+                            readSpeed = d.readSpeed,
+                            writeSpeed = d.writeSpeed,
+                            rpm = d.rpm,
                             catalogs = await _sc.AdminServices.TachLinkImage(d.linkCatalogs),
                         }).ToArray();
 
@@ -667,7 +728,11 @@ namespace BackEndApis.Controllers
                                 details = l.Details,
                                 linkCatalog = l.Catalogs ?? string.Empty,
 
-                                cpu = l.Cpu ?? string.Empty,
+                                chipBrand = l.chipBrand ?? string.Empty,
+                                processorCount = l.processorCount ?? string.Empty,
+                                series = l.series ?? string.Empty,
+                                detailCpu = l.detailCpu ?? string.Empty,
+
                                 displaySize = l.DisplaySize ?? string.Empty,
                                 display = l.Display ?? string.Empty,
                                 operating = l.Operating ?? string.Empty,
@@ -684,7 +749,11 @@ namespace BackEndApis.Controllers
                             details = l.details,
                             catalogs = await _sc.AdminServices.TachLinkImage(l.linkCatalog),
 
-                            cpu = l.cpu ?? string.Empty,
+                            chipBrand = l.chipBrand ?? string.Empty,
+                            processorCount = l.processorCount ?? string.Empty,
+                            series = l.series ?? string.Empty,
+                            detailCpu = l.detailCpu ?? string.Empty,
+
                             displaySize = l.displaySize ?? string.Empty,
                             display = l.display ?? string.Empty,
                             operating = l.operating ?? string.Empty,
