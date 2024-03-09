@@ -16,6 +16,10 @@ import * as queryString from 'query-string';
 
 // };
 
+// post thêm sản phẩm
+const postAddProduct = (product) => {
+    return axios.post("/api/admin/products/add", product);
+}
 
 const getAllAdmin = () => {
     return axios.get("/api/admin/get-admin");
@@ -25,7 +29,14 @@ const getUser_Admin = () => {
     return axios.get("/api/admin/get-user");
 }
 
+const getAPIProductList = () => {
+    return axios.get("/api/admin/products");
+}
+
 export {
     getAllAdmin,
     getUser_Admin,
+
+    postAddProduct,
+    getAPIProductList,
 }

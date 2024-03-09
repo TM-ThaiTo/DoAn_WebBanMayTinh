@@ -32,84 +32,82 @@ import Laptop from './Laptop/index.js';
 import MainBoard from './Mainboard/index.js';
 import Monitor from './Monitor/index.js';
 import Mouse from './Mouse/index.js';
-import ProductDetail from './ProductDetailModal/index.js';
+import ProductDesc from './ProductDetailModal/index.js';
 import Ram from './Ram/index.js';
 import Router from './Router/index.js';
 import Speaker from './Speaker/index.js';
 
-class ProductAddForm extends Component {
+// add api
+import { postAddProduct } from '../../../../services/adminService.js';
 
+const suffixColor = '#aaa';
+
+
+class ProductAddForm extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             isSubmitting: false,
             isTypeSelected: false,
+            // lưu trữ loại sản phẩm
             typeSelected: -1,
+            typeString: "",
             productDecs: null,
-            avtFileList: [],
-            avatar: null,
+            infoDetail: "",
+            avtBase64: null,
             fileList: [],
             fileCompressedList: [],
+            avtFileList: [],
         };
 
         this.formRef = React.createRef();
+        this.setAvtFileList = this.setAvtFileList.bind(this);
 
         this.PRODUCT_TYPES = [
-            { type: 0, label: 'Laptop' },
-            { type: 1, label: 'Ổ cứng' },
-            { type: 2, label: 'Card màn hình' },
-            { type: 3, label: 'Main board' },
-            { type: 4, label: 'RAM' },
-            { type: 5, label: 'Điện thoại' },
-            { type: 6, label: 'Sạc dự phòng' },
-            { type: 7, label: 'Tai nghe' },
-            { type: 8, label: 'Bàn phím' },
-            { type: 9, label: 'Màn hình' },
-            { type: 10, label: 'Chuột' },
-            { type: 11, label: 'Router Wifi' },
-            { type: 12, label: 'Loa' },
-            { type: 13, label: 'Máy ảnh' },
-            { type: 14, label: 'Webcam' },
+            { type: 0, label: 'RAM', info: "infoRam", typeString: "ram" },
+            { type: 1, label: 'Ổ cứng', info: "infoDisk", typeString: "disk" },
+            { type: 2, label: 'Laptop', info: "infoLaptop", typeString: "laptop" },
+            { type: 3, label: 'Card màn hình', info: "infoDisplay", typeString: "display" },
+            { type: 4, label: 'Main board', info: "infoMainboard", typeString: "mainboard" },
+            { type: 5, label: 'Tai nghe', info: "infoHeadphone", typeString: "headphone" },
+            { type: 6, label: 'Bàn phím', info: "infoKeyboard", typeString: "keyboard" },
+            { type: 7, label: 'Màn hình', info: "infoMonitor", typeString: "monitor" },
+            { type: 8, label: 'Chuột', info: "infoMouse", typeString: "mouse" },
+            { type: 9, label: 'Router Wifi', info: "infoRouter", typeString: "router" },
+            { type: 10, label: 'Loa', info: "infoSpeaker", typeString: "speaker" },
         ];
     };
 
+    setAvtFileList(fileList) {
+        this.setState({ avtFileList: fileList });
+    }
+
+    // render giao diện thêm chi tiết sản phẩm
     onRenderProduct = (value) => {
         switch (value) {
             case 0:
-                return <Laptop />;
+                return <Ram />;
             case 1:
                 return <Disk />;
             case 2:
-                return <Display />;
+                return <Laptop />;
             case 3:
-                return <MainBoard />;
+                return <Display />;
             case 4:
-                return <Ram />;
+                return <MainBoard />;
             case 5:
-                //   return <Mobile />;
-                return;
-            case 6:
-                //   return <BackupCharger />;
-                return
-            case 7:
                 return <Headphone />;
-            case 8:
+            case 6:
                 return <Keyboard />;
-            case 9:
+            case 7:
                 return <Monitor />;
-            case 10:
+            case 8:
                 return <Mouse />;
-            case 11:
+            case 9:
                 return <Router />;
-            case 12:
+            case 10:
                 return <Speaker />;
-            case 13:
-                //   return <Camera />;
-                return
-            case 14:
-                //   return <Webcam />;
-                return;
             default:
                 break;
         }
@@ -117,53 +115,78 @@ class ProductAddForm extends Component {
 
     // render file
     onCompressFile = async (file, type = 0) => {
-        new Compressor(file, {
-            // quality: constants.COMPRESSION_RADIO,
-            // convertSize: constants.COMPRESSION_RADIO_PNG,
-            quality: 0.6,
-            convertSize: 2000000,
-            success: (fileCompressed) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(fileCompressed);
-                reader.onloadend = async () => {
-                    if (type === 0) this.setState({ avatar: reader.result });
-                    else if (this.fileCompressedList.length < 10) {
-                        this.fileCompressedList.push({
-                            data: reader.result,
-                            uid: file.uid,
+        try {
+            const compressedFile = await new Promise((resolve, reject) => {
+                new Compressor(file, {
+                    quality: 0.6,
+                    convertSize: 2000000,
+                    success: (fileCompressed) => resolve(fileCompressed),
+                    error: (err) => reject(err),
+                });
+            });
+
+            const reader = new FileReader();
+            reader.readAsDataURL(compressedFile);
+            reader.onloadend = async () => {
+                if (type === 0) {
+                    this.setState({ avtBase64: reader.result });
+                } else {
+                    const { fileCompressedList } = this.state; // Assuming fileCompressedList is in the component state
+                    if (fileCompressedList.length < 10) {
+                        this.setState({
+                            fileCompressedList: [
+                                ...fileCompressedList,
+                                {
+                                    data: reader.result,
+                                    uid: file.uid,
+                                },
+                            ],
                         });
                     }
-                };
-            },
-            error: (err) => {
-                message.error('Lỗi: ', err);
-            },
-        });
-    };
+                }
+            };
+        } catch (error) {
+            message.error('Lỗi: ', error);
+        }
+    }
 
-    // chuyển dữ liệu 
+    // chuyển dữ liệu và tìm typeString
     onProductTypeChange = (value) => {
-        if (!this.state.isTypeSelected) this.setState({ isTypeSelected: true });
-        this.setState({ typeSelected: value });
+        const selectedProduct = this.PRODUCT_TYPES.find(item => item.type === value);
+
+        if (selectedProduct) {
+            if (!this.state.isTypeSelected) {
+                this.setState({ isTypeSelected: true });
+            }
+
+            this.setState({
+                typeSelected: value,
+                infoDetail: selectedProduct.info,
+                typeString: selectedProduct.typeString,
+            });
+        }
     };
 
+    // chuyền dữ liệu và lấy dữ liệu từ modal cho Desc
     onGetDetailDesc = (data) => {
         this.setState({ productDecs: data });
     };
 
+    // reset form
     onResetForm = () => {
         this.formRef.current.resetFields();
         this.fileCompressedList = [];
         this.setState({
             avtFileList: [],
-            avatar: null,
+            avtBase64: null,
             fileList: [],
         });
     };
 
+    // kiểm tra thông tin nhập
     onValBeforeSubmit = async (data) => {
         try {
-            if (!this.state.avatar) {
+            if (!this.state.avtBase64) {
                 message.error('Thêm avatar !', 2);
                 return;
             }
@@ -178,7 +201,7 @@ class ProductAddForm extends Component {
                         this.onSubmit(data);
                     },
                 });
-            } else if (this.fileCompressedList.length === 0) {
+            } else if (this.state.fileCompressedList.length === 0) {
                 Modal.confirm({
                     title: 'Bạn có chắc muốn submit ?',
                     content: 'Chưa có HÌNH ẢNH MÔ TẢ cho sản phẩm này !',
@@ -193,10 +216,12 @@ class ProductAddForm extends Component {
                 this.onSubmit(data);
             }
         } catch (error) {
+            console.log("check error: ", error);
             message.error('Có lỗi. Thử lại !');
         }
     };
 
+    // nút xác nhận và gửi api thêm sản phẩm
     onSubmit = async (data) => {
         try {
             this.setState({ isSubmitting: true });
@@ -208,31 +233,62 @@ class ProductAddForm extends Component {
                 stock,
                 brand,
                 otherInfo,
-                ...rest
+                ...rest // tổng hợp prvDetails
             } = data;
+            const discountAsString = discount.toString();
+
+            // tổng hợp product
             const product = {
-                type: this.state.typeSelected,
-                discount,
+                type: this.state.typeString,
+                discount: discountAsString,
                 code,
                 name,
                 price,
                 brand,
                 stock,
                 otherInfo,
-                avatar: this.state.avatar,
+                avtBase64: this.state.avtBase64,
             };
-            const catalogs = this.fileCompressedList.map((item) => item.data);
+
+            // Move this declaration before using it in the details object
+            const catalogs = this.state.fileCompressedList.map((item) => item.data);
+
+            // tổng hợp detail (shareDetails, prvDetails)
+            const { capacity, processorCount, weight,
+                warranty,
+                ...prvDetailsWithoutWarranty } = rest;
+
             const details = {
-                ...rest,
-                catalogs,
+                shareDetails: {
+                    catalogs: catalogs,
+                    warranty: warranty.toString(),
+                },
+                prvDetails: {
+                    [this.state.infoDetail]: {
+                        ...(capacity && { capacity: capacity.toString() }),
+                        ...(processorCount && { processorCount: processorCount.toString() }),
+                        ...(weight && { weight: weight.toString() }),
+
+
+                        ...prvDetailsWithoutWarranty,
+                    }
+                },
             };
+
             const dataSend = { product, details, desc: this.state.productDecs };
-            const response = await adminApi.postAddProduct(dataSend);
-            if (response.status === 200) {
-                this.setState({ isSubmitting: false });
-                message.success('Thêm sản phẩm thành công');
-            }
-        } catch (error) {
+
+            // const response = await postAddProduct(dataSend);
+            // if (response.code === 0) {
+            //     this.setState({ isSubmitting: false });
+            //     message.success('Thêm sản phẩm thành công');
+            // }
+            // else {
+            //     console.log("check respone: ", response);
+            // }
+
+            console.log("check datasend: ", dataSend);
+        }
+        catch (error) {
             this.setState({ isSubmitting: false });
             if (error.response) {
                 message.error(error.response.data.message);
@@ -243,8 +299,9 @@ class ProductAddForm extends Component {
     };
 
     render() {
-        const { isTypeSelected, avtFileList, fileList, isSubmitting } = this.state;
+        const { isTypeSelected, avtFileList, fileList, isSubmitting, infoDetail } = this.state;
 
+        console.log("check info: ", this.state.infoDetail);
         return (
             <div className="Admin-Product-Page">
                 <h1 className="t-center p-t-20">
@@ -256,7 +313,7 @@ class ProductAddForm extends Component {
                     style={{ width: 250 }}
                     onChange={this.onProductTypeChange}
                     placeholder="Chọn loại sản phẩm *">
-                    {constants.PRODUCT_TYPES.map((item, index) => (
+                    {this.PRODUCT_TYPES.map((item, index) => (
                         <Select.Option value={item.type} key={index}>
                             {item.label}
                         </Select.Option>
@@ -269,10 +326,14 @@ class ProductAddForm extends Component {
                             ref={this.formRef}
                             onFinish={this.onValBeforeSubmit}
                             onFinishFailed={() => message.error('Lỗi. Kiểm tra lại form')}>
+
+                            {/* các thông số cơ bản */}
                             <Row gutter={[16, 16]}>
+                                {/*  tổng quan một sản phẩm */}
                                 <Col span={24}>
                                     <h2>Thông tin cơ bản sản phẩm</h2>
                                 </Col>
+                                {/* mã sản phẩm */}
                                 <Col span={12} md={8} xl={6} xxl={4}>
                                     <Form.Item
                                         name="code"
@@ -290,11 +351,189 @@ class ProductAddForm extends Component {
                                         />
                                     </Form.Item>
                                 </Col>
+                                {/* tên sản phẩm */}
+                                <Col span={12} md={8} xl={6} xxl={4}>
+                                    <Form.Item
+                                        name="name"
+                                        rules={[
+                                            { required: true, message: 'Bắt buộc', whitespace: true },
+                                        ]}>
+                                        <Input
+                                            size="large"
+                                            placeholder="Tên sản phẩm *"
+                                            suffix={
+                                                <Tooltip title="Laptop Apple MacBook Air 13 2019 MVFM2SA/A (Core i5/8GB/128GB SSD/UHD 617/macOS/1.3 kg)">
+                                                    <InfoCircleOutlined style={{ color: suffixColor }} />
+                                                </Tooltip>
+                                            }
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                {/* giá sản phẩm */}
+                                <Col span={12} md={8} xl={6} xxl={4}>
+                                    <Form.Item
+                                        name="price"
+                                        rules={[{ required: true, message: 'Bắt buộc' }]}>
+                                        <InputNumber
+                                            style={{ width: '100%' }}
+                                            step={10000}
+                                            size="large"
+                                            placeholder="Giá *"
+                                            min={0}
+                                            max={1000000000}
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                {/* số hang tồn kho */}
+                                <Col span={12} md={8} xl={6} xxl={4}>
+                                    <Form.Item
+                                        name="stock"
+                                        rules={[{ required: true, message: 'Bắt buộc' }]}>
+                                        <InputNumber
+                                            style={{ width: '100%' }}
+                                            step={5}
+                                            size="large"
+                                            min={0}
+                                            max={100000}
+                                            placeholder="Số lượng hàng tồn kho *"
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                {/* thương hiệu */}
+                                <Col span={12} md={8} xl={6} xxl={4}>
+                                    <Form.Item
+                                        name="brand"
+                                        rules={[
+                                            { required: true, message: 'Bắt buộc', whitespace: true },
+                                        ]}>
+                                        <Input
+                                            size="large"
+                                            placeholder="Thương hiệu *"
+                                            suffix={
+                                                <Tooltip title="Apple">
+                                                    <InfoCircleOutlined style={{ color: suffixColor }} />
+                                                </Tooltip>
+                                            }
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                {/*Thời gian bảo hành*/}
+                                <Col span={12} md={8} xl={6} xxl={4}>
+                                    <Form.Item
+                                        name="warranty"
+                                        rules={[{ required: true, message: 'Bắt buộc' }]}>
+                                        <InputNumber
+                                            style={{ width: '100%' }}
+                                            step={6}
+                                            size="large"
+                                            min={0}
+                                            max={240}
+                                            placeholder="Tg bảo hành (Theo tháng) *"
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                {/*Mức giảm giá*/}
+                                <Col span={12} md={8} xl={6} xxl={4}>
+                                    <Form.Item
+                                        name="discount"
+                                        rules={[{ required: true, message: 'Bắt buộc' }]}>
+                                        <InputNumber
+                                            style={{ width: '100%' }}
+                                            step={10}
+                                            size="large"
+                                            min={0}
+                                            max={30}
+                                            placeholder="phần trăm khuyến mãi (5%) *"
+                                        />
+                                    </Form.Item>
+                                </Col>
+                                {/* avatar */}
+                                <Col span={12} md={8} xl={6} xxl={4}>
+                                    <Upload
+                                        listType="picture"
+                                        fileList={avtFileList}
+                                        onChange={({ fileList }) => {
+                                            if (avtFileList.length < 1) this.setAvtFileList(fileList);
+                                        }}
+                                        onRemove={() => {
+                                            this.setAvatar(null);
+                                            this.setAvtFileList([]);
+                                        }}
+                                        beforeUpload={(file) => {
+                                            this.onCompressFile(file, 0);
+                                            return false;
+                                        }}>
+                                        <Button
+                                            disabled={this.state.avtBase64 !== null ? true : false}
+                                            className="w-100 h-100"
+                                            icon={<UploadOutlined />}>
+                                            Upload Avatar
+                                        </Button>
+                                    </Upload>
+                                </Col>
+                                {/* other information
+                                <Col span={12} md={8} xl={6} xxl={4}>
+                                    <Form.List name="otherInfo">
+                                        {(fields, { add, remove }) => (
+                                            <>
+                                                {fields.map((field) => (
+                                                    <Space
+                                                        key={field.key}
+                                                        style={{ display: 'flex', marginBottom: 8 }}
+                                                        align="center">
+                                                        <Form.Item
+                                                            {...field}
+                                                            name={[field.name, 'key']}
+                                                            fieldKey={[field.fieldKey, 'key']}
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message: 'vd:Ưu đãi',
+                                                                },
+                                                            ]}>
+                                                            <Input placeholder="Key" />
+                                                        </Form.Item>
+                                                        <Form.Item
+                                                            {...field}
+                                                            name={[field.name, 'value']}
+                                                            fieldKey={[field.fieldKey, 'value']}
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message: 'vd: Combo chuột',
+                                                                },
+                                                            ]}>
+                                                            <Input placeholder="Value" />
+                                                        </Form.Item>
+
+                                                        <MinusCircleOutlined
+                                                            onClick={() => remove(field.name)}
+                                                        />
+                                                    </Space>
+                                                ))}
+                                                <Form.Item>
+                                                    <Button
+                                                        size="large"
+                                                        type="dashed"
+                                                        onClick={() => add()}
+                                                        block
+                                                        icon={<PlusOutlined />}>
+                                                        Thêm thông tin khác
+                                                    </Button>
+                                                </Form.Item>
+                                            </>
+                                        )}
+                                    </Form.List>
+                                </Col> */}
+
+                                {/* mô tả chi tiết */}
+                                <ProductDesc onGetDetailDesc={this.onGetDetailDesc} />
+
                                 {/* ... (other form items) ... */}
                                 <Col span={24}>
                                     <h2 className="m-b-10">
                                         Thông tin chi tiết cho&nbsp;
-                                        <b>{constants.PRODUCT_TYPES[this.state.typeSelected].label}</b>
+                                        <b>{this.PRODUCT_TYPES[this.state.typeSelected].label}</b>
                                     </h2>
                                     {this.onRenderProduct(this.state.typeSelected)}
                                 </Col>
@@ -320,6 +559,7 @@ class ProductAddForm extends Component {
                                         {fileList.length < 10 && '+ Thêm ảnh'}
                                     </Upload>
                                 </Col>
+                                {/* ... btn reset and add ... */}
                                 <Col span={24} className="d-flex justify-content-end">
                                     <Button
                                         className="m-r-20"
@@ -330,7 +570,7 @@ class ProductAddForm extends Component {
                                         Reset Form
                                     </Button>
                                     <Button
-                                        loading={isSubmitting}
+                                        loading={this.isSubmitting}
                                         size="large"
                                         type="primary"
                                         htmlType="submit">
@@ -345,7 +585,6 @@ class ProductAddForm extends Component {
         );
     }
 }
-
 
 const mapStateToProps = state => {
     return {
