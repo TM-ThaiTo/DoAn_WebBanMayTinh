@@ -13,14 +13,7 @@ import CustomScrollbars from '../components/CustomScrollbars.js';
 import routesConfig from '../config/routeApp.js';
 
 // các giao diện admin
-import Login_Admin from './Auth/Login';
-import System from '../routes/System';
-
 import NotFound from '../components/NotFound/NotFound.js';
-
-import Header_Top from './Home_User/Header/Header_Top/Header_HomePage_User.js';
-import Header_Logo from './Home_User/Header/Header_Logo/Header_Logo.js';
-import Footer from './Home_User/Footer/Footer.js';
 class App extends Component {
 
     handlePersistorState = () => {
@@ -40,11 +33,8 @@ class App extends Component {
     componentDidMount() {
         this.handlePersistorState();
     }
-
-
     render() {
         const { renderRoutes, routes } = routesConfig;
-
         return (
             <Fragment>
                 <Router history={history}>
@@ -55,9 +45,6 @@ class App extends Component {
 
                                 <Switch>
                                     {renderRoutes(routes)};
-
-                                    <Route path={PATH.ADMIN} component={userIsNotAuthenticated(Login_Admin)} />
-                                    <Route path={PATH.SYSTEM} component={userIsAuthenticated(System)} />
                                     <Route>
                                         <NotFound />
                                     </Route>

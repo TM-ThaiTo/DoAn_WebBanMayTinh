@@ -29,6 +29,7 @@ import AdminUser from './AdminUser/index.js';
 import CustomerList from './CustomersUser/index.js';
 import OrderList from './OrderList/index.js';
 
+import Login from './Login/index.js';
 // const Dashboard = React.lazy(() => import('./Dashboard/index.js'));
 // const SeeProduct = React.lazy(() => import('./ProductPage/SeeProduct/index.js'));
 // const AddProduct = React.lazy(() => import('./ProductPage/ProductAddForm/index.js'));
@@ -168,63 +169,70 @@ class AdminPage extends Component {
     render() {
         const { keyMenu, isLogin, adminName } = this.state;
         return (
-            <>
-                <div className="Admin-Page" style={{ backgroundColor: '#e5e5e5' }}>
-                    {/* header */}
-                    <div
-                        className="d-flex align-i-center header-admin-page"
-                        style={{ height: '75px', backgroundColor: mainColor }}>
-                        <div className="logo t-center" style={{ flexBasis: '200px' }}>
-                            {/* <img width={100} height={48} src={logoUrl} /> */}
-                        </div>
-                        <div className="flex-grow-1 d-flex align-i-center">
-                            <h2 className="t-color-primary flex-grow-1 p-l-44 main-title">
-                                <span className='admin-page-title'>Admin Page &gt; </span>
-                                <span className="option-title">
-                                    {this.showTitleSelected(keyMenu)}
-                                </span>
-                            </h2>
-                            <a
-                                href="/"
-                                className="open-web p-r-24 t-color-primary font-weight-500 p-b-10">
-                                <HomeOutlined
-                                    className="icon font-size-28px t-color-primary m-r-10"
-                                    style={{ transform: 'translateY(3px)' }}
-                                />
-                                <span className="open-web-title">Open the website</span>
-                            </a>
-                            <div className="user-admin p-r-24 t-color-primary font-weight-500">
-                                <Avatar size={36} className="m-r-10" src={defaultAvt} />
-                                <span className="user-admin-title">Thái Tố</span>
+            <div className="Admin-Page" style={{ backgroundColor: '#e5e5e5' }}>
+                {!isLogin ? (
+                    <div className="trans-center bg-white p-32 bor-rad-8 box-sha-home">
+                        <Login onLoginAdmin={this.onLogin} />
+                    </div>
+                ) : (
+                    <>
+                        {/* header */}
+                        <div
+                            className="d-flex align-i-center header-admin-page"
+                            style={{ height: '75px', backgroundColor: mainColor }}>
+                            <div className="logo t-center" style={{ flexBasis: '200px' }}>
+                                {/* <img width={100} height={48} src={logoUrl} /> */}
                             </div>
-                            <Button onClick={this.onLogout} className="m-r-44" type="dashed">
-                                Đăng xuất
-                            </Button>
+                            <div className="flex-grow-1 d-flex align-i-center">
+                                <h2 className="t-color-primary flex-grow-1 p-l-44 main-title">
+                                    <span className='admin-page-title'>Admin Page &gt; </span>
+                                    <span className="option-title">
+                                        {this.showTitleSelected(keyMenu)}
+                                    </span>
+                                </h2>
+                                <a
+                                    href="/"
+                                    // target='black'
+                                    className="open-web p-r-24 t-color-primary font-weight-500 p-b-10">
+                                    <HomeOutlined
+                                        className="icon font-size-28px t-color-primary m-r-10"
+                                        style={{ transform: 'translateY(3px)' }}
+                                    />
+                                    <span className="open-web-title">Open the website</span>
+                                </a>
+                                <div className="user-admin p-r-24 t-color-primary font-weight-500">
+                                    <Avatar size={36} className="m-r-10" src={defaultAvt} />
+                                    <span className="user-admin-title">Thái Tố</span>
+                                </div>
+                                <Button onClick={this.onLogout} className="m-r-44" type="dashed">
+                                    Đăng xuất
+                                </Button>
+                            </div>
                         </div>
-                    </div>
-                    {/* main content */}
-                    <div className="d-flex">
-                        {/* menu dashboard */}
-                        <Menu
-                            className="menu p-t-24"
-                            theme="dark"
-                            onClick={this.handleSelected}
-                            style={{
-                                height: 'inherit',
-                                minHeight: '100vh',
-                                backgroundColor: mainColor,
-                                flexBasis: '200px',
-                            }}
-                            defaultSelectedKeys={keyMenu}
-                            mode="inline">
-                            {this.renderMenuItem()}
-                        </Menu>
+                        {/* main content */}
+                        <div className="d-flex">
+                            {/* menu dashboard */}
+                            <Menu
+                                className="menu p-t-24"
+                                theme="dark"
+                                onClick={this.handleSelected}
+                                style={{
+                                    height: 'inherit',
+                                    minHeight: '100vh',
+                                    backgroundColor: mainColor,
+                                    flexBasis: '200px',
+                                }}
+                                defaultSelectedKeys={keyMenu}
+                                mode="inline">
+                                {this.renderMenuItem()}
+                            </Menu>
 
-                        {/* main contents */}
-                        <div className="flex-grow-1">{this.renderMenuComponent(keyMenu)}</div>
-                    </div>
-                </div>
-            </>
+                            {/* main contents */}
+                            <div className="flex-grow-1">{this.renderMenuComponent(keyMenu)}</div>
+                        </div>
+                    </>
+                )}
+            </div>
         )
     }
 }
