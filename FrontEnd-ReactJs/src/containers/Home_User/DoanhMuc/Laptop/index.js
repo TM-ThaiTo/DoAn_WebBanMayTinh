@@ -18,7 +18,7 @@ import ProductView from "../../../../components/ProductView";
 const mockProducts = [
     {
         _id: '1',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1710044700/Image/TUF%20Gaming.webp',
         name: 'Product 1 sdasdsdsa',
         price: 200000,
         discount: 10,
@@ -34,7 +34,7 @@ const mockProducts = [
     },
     {
         _id: '3',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1710044700/Image/TUF%20Gaming.webp',
         name: 'Product 1',
         price: 50,
         discount: 10,
@@ -42,7 +42,7 @@ const mockProducts = [
     },
     {
         _id: '4',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1710044700/Image/TUF%20Gaming.webp',
         name: 'Product 1',
         price: 50,
         discount: 10,
@@ -50,7 +50,7 @@ const mockProducts = [
     },
     {
         _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1710044700/Image/TUF%20Gaming.webp',
         name: 'Product 1',
         price: 50,
         discount: 10,
@@ -58,7 +58,7 @@ const mockProducts = [
     },
     {
         _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1710044700/Image/TUF%20Gaming.webp',
         name: 'Product 1',
         price: 50,
         discount: 10,
@@ -66,7 +66,7 @@ const mockProducts = [
     },
     {
         _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1710044700/Image/TUF%20Gaming.webp',
         name: 'Product 1',
         price: 50,
         discount: 10,
@@ -74,7 +74,7 @@ const mockProducts = [
     },
     {
         _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1710044700/Image/TUF%20Gaming.webp',
         name: 'Product 1',
         price: 50,
         discount: 10,
@@ -82,7 +82,7 @@ const mockProducts = [
     },
     {
         _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1710044700/Image/TUF%20Gaming.webp',
         name: 'Product 1',
         price: 50,
         discount: 10,
@@ -90,7 +90,7 @@ const mockProducts = [
     },
     {
         _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1710044700/Image/TUF%20Gaming.webp',
         name: 'Product 1',
         price: 50,
         discount: 10,
@@ -98,7 +98,7 @@ const mockProducts = [
     },
     {
         _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1710044700/Image/TUF%20Gaming.webp',
         name: 'Product 1',
         price: 50,
         discount: 10,
@@ -106,7 +106,7 @@ const mockProducts = [
     },
     {
         _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1710044700/Image/TUF%20Gaming.webp',
         name: 'Product 1',
         price: 50,
         discount: 10,
@@ -114,7 +114,7 @@ const mockProducts = [
     },
     {
         _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1710044700/Image/TUF%20Gaming.webp',
         name: 'Product 1',
         price: 50,
         discount: 10,
@@ -122,7 +122,7 @@ const mockProducts = [
     },
     {
         _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1710044700/Image/TUF%20Gaming.webp',
         name: 'Product 1',
         price: 50,
         discount: 10,
@@ -130,7 +130,7 @@ const mockProducts = [
     },
     {
         _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1710044700/Image/TUF%20Gaming.webp',
         name: 'Product 1',
         price: 50,
         discount: 10,

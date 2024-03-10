@@ -9,7 +9,7 @@ import HomePage from "../containers/Home_User/HomePage_User";
 import Login_User from "../containers/Home_User/Login_Signup_User/Login_User/Login_User";
 import SignUp_User from "../containers/Home_User/Login_Signup_User/SignUp_User/SignUp_User";
 import ForgotPassword from '../containers/Home_User/Login_Signup_User/ForgotPassword/ForgotPassword.js';
-import AllProduct from '../containers/Home_User/SanPham/All_Products/AllProduct.js';
+// import AllProduct from '../containers/Home_User/SanPham/All_Products/AllProduct.js';
 import AllFlashSale from '../containers/Home_User/FlashSale/ALL_FlashSale/AllFlashSale.js';
 import NotFound from '../components/NotFound/NotFound.js';
 import Product_View from '../components/Product/ProductView/Product_View';
@@ -60,11 +60,11 @@ const routes = [
         exact: true,
         main: () => <AllFlashSale />
     },
-    {
-        path: PATH.ALL_PRODUCT,
-        exact: true,
-        main: () => <AllProduct />
-    },
+    // {
+    //     path: PATH.ALL_PRODUCT,
+    //     exact: true,
+    //     main: () => <AllProduct />
+    // },
 
 ];
 

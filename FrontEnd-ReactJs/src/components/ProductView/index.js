@@ -15,7 +15,7 @@ class ProductView extends Component {
     }
 
     // fn: hàm rút gọn tên sản phẩm
-    reduceProductName = (name, length = 64) => {
+    reduceProductName = (name, length = 30) => {
         let result = name;
         if (name && name.length >= length) {
             result = name.slice(0, length) + ' ...';
@@ -51,12 +51,14 @@ class ProductView extends Component {
                 style={{ height, maxWidth }}
                 loading={false}
                 cover={
-                    <img className="max-w-100 max-h-100" src={avtUrl} alt="Product Photo" />
+                    <div className="img-container">
+                        <img className="img" src={avtUrl} alt="Product Photo" />
+                    </div>
                 }
                 hoverable
             >
                 {/* Tên sản phẩm */}
-                <div className="font-size-16px m-b-10">
+                <div className="m-b-10 text-name">
                     {this.reduceProductName(name)}
                 </div>
 
@@ -67,12 +69,12 @@ class ProductView extends Component {
                     )}
                     {price > 0 && (
                         <>
-                            <span className="Product-View-price--main font-size-20px font-weight-b">
+                            <span className="Product-View-price--main font-size-20px font-weight-b text-price">
                                 {this.formatProductPrice(price)}
                             </span>
                             {discount > 0 && (
                                 <div>
-                                    <span className="Product-View-price--cancel font-weight-500">
+                                    <span className="Product-View-price--cancel font-weight-500 ">
                                         {this.formatProductPrice(
                                             price + (discount * price) / 100
                                         )}
