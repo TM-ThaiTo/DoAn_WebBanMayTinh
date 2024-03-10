@@ -6,6 +6,10 @@ import { LANGUAGES } from '../../../utils';
 import { changeLanguageApp } from '../../../store/actions';
 import Product from '../../../components/Product/ProductCard/Product_front_one.js'
 
+import { Col, Pagination, Row, Spin } from 'antd';
+import { Link } from 'react-router-dom';
+import ProductView from '../../../components/ProductView/index.js';
+
 // scss
 import './All_Products.scss'
 class All_Products extends Component {

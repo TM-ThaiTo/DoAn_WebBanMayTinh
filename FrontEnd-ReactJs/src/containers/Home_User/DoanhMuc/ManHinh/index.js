@@ -7,7 +7,7 @@ import { LANGUAGES } from '../../../../utils'
 
 
 // scss
-import '../../FlashSale/FlashSale.scss'
+// import '../../FlashSale/FlashSale.scss'
 
 // giao diện trong components
 import Product from "../../../../components/Product/ProductCard/Product_front_one";

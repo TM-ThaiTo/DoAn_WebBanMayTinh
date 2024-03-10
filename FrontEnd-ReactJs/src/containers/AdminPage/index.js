@@ -202,7 +202,7 @@ class AdminPage extends Component {
                                 </a>
                                 <div className="user-admin p-r-24 t-color-primary font-weight-500">
                                     <Avatar size={36} className="m-r-10" src={defaultAvt} />
-                                    <span className="user-admin-title">Thái Tố</span>
+                                    <span className="user-admin-title">{adminName}</span>
                                 </div>
                                 <Button onClick={this.onLogout} className="m-r-44" type="dashed">
                                     Đăng xuất

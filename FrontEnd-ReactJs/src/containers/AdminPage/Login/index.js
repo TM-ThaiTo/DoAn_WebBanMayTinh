@@ -3,20 +3,28 @@ import PropTypes from 'prop-types';
 import { Form, Input, Button, message, Row, Col, Card } from 'antd';
 import './index.scss';
 
+import { postLoginAdmin } from "../../../services/adminService";
+
 class Login extends Component {
 
 
     onFinish = async (account) => {
         // try {
-        //   const response = await adminApi.postLogin(account);
-        //   if (response) {
-        //     message.success('Đăng nhập thành công', 2);
-        //     this.props.onLogin(true, response.data.name);
-        //   }
+        //     const response = await postLoginAdmin(account);
+        //     if (response && response.code === 0) {
+        //         message.success('Đăng nhập thành công', 2);
+        //         this.props.onLoginAdmin(true, response.data.fullName);
+        //         console.log("check name: ", response.data.fullName);
+        //     }
+        //     else {
+        //         message.error('Tài khoản không tồn tại hoặc sai mật khẩu');
+        //         this.props.onLoginAdmin(false);
+        //     }
         // } catch (error) {
-        //   message.error('Tài khoản không tồn tại hoặc sai mật khẩu', 2);
-        //   this.props.onLogin(false);
+        //     message.error('Tài khoản không tồn tại hoặc sai mật khẩu', 2);
+        //     this.props.onLoginAdmin(false);
         // }
+
         this.props.onLoginAdmin(true, 'OK');
     };
 
@@ -30,7 +38,7 @@ class Login extends Component {
                             <Col span={24}>
                                 <Form.Item
                                     label="Username"
-                                    name="userName"
+                                    name="email"
                                     rules={[
                                         { required: true, message: 'Please input your username!' },
                                     ]}

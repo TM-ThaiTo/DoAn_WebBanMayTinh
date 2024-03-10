@@ -2,7 +2,7 @@ import Slider from "react-slick";
 import { FormattedMessage } from 'react-intl';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { LANGUAGES } from '../../../utils'
+import { LANGUAGES } from '../../../utils/index.js'
 // import { changeLanguageApp } from '../../../store/actions';
 
 
@@ -23,8 +23,8 @@ class DoanhMuc extends Component {
         return (
             <React.Fragment>
                 <Laptop />
-                <Gear />
-                <ManHinh />
+                {/* <Gear /> */}
+                {/* <ManHinh /> */}
             </React.Fragment>
         );
     }

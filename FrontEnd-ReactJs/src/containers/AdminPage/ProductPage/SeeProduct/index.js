@@ -9,6 +9,8 @@ import {
 import { message, Pagination, Spin, Table, Tooltip } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
 
+import EditProductModal from './EditProductModal';
+
 import { getAPIProductList } from "../../../../services/adminService";
 
 class SeeProduct extends Component {
@@ -25,6 +27,7 @@ class SeeProduct extends Component {
         };
 
         this.isSubscribe = true;
+        this.setEditModal = this.setEditModal.bind(this);
     }
 
     // Cột của bảng
@@ -33,31 +36,31 @@ class SeeProduct extends Component {
             title: 'Mã',
             key: 'code',
             dataIndex: 'code',
-            // render: (code, data) => (
-            //     <a target="blank" href={`/product/${data._id}`}>
-            //         {code}
-            //     </a>
-            // ),
+            render: (code, data) => (
+                <a target="blank" href={`/product/${data._id}`}>
+                    {code}
+                </a>
+            ),
         },
         {
             title: 'Tên',
             key: 'name',
             dataIndex: 'name',
-            // render: (name) => (
-            //     <Tooltip title={name}>{this.reduceProductName(name, 40)}</Tooltip>
-            // ),
+            render: (name) => (
+                <Tooltip title={name}>{this.reduceProductName(name, 40)}</Tooltip>
+            ),
         },
         {
             title: 'Giá',
             key: 'price',
             dataIndex: 'price',
-            // defaultSortOrder: 'descend',
-            // sorter: (a, b) => a.price - b.price,
-            // render: (price) => (
-            //     <h3 style={{ color: '#4F55C5' }}>
-            //         {price ? this.formatProductPrice(price) : 'Liên hệ'}
-            //     </h3>
-            // ),
+            defaultSortOrder: 'descend',
+            sorter: (a, b) => a.price - b.price,
+            render: (price) => (
+                <h5 style={{ color: '#4F55C5' }}>
+                    {price ? this.formatProductPrice(price) : 'Liên hệ'}
+                </h5>
+            ),
         },
         {
             title: 'Loại',
@@ -71,29 +74,29 @@ class SeeProduct extends Component {
             title: 'Thương hiệu',
             key: 'brand',
             dataIndex: 'brand',
-            // sorter: (a, b) => {
-            //     if (a.brand < b.brand) return -1;
-            //     if (a.brand > b.brand) return 1;
-            //     return 0;
-            // },
-            // render: (brand) => (
-            //     <Tooltip title={brand}>{this.reduceProductName(brand, 40)}</Tooltip>
-            // ),
+            sorter: (a, b) => {
+                if (a.brand < b.brand) return -1;
+                if (a.brand > b.brand) return 1;
+                return 0;
+            },
+            render: (brand) => (
+                <Tooltip title={brand}>{this.reduceProductName(brand, 40)}</Tooltip>
+            ),
         },
         {
             title: 'Tồn kho',
             key: 'stock',
             dataIndex: 'stock',
             defaultSortOrder: 'ascend',
-            // sorter: (a, b) => a.stock - b.stock,
+            sorter: (a, b) => a.stock - b.stock,
         },
         {
             title: 'Mức giảm giá',
             key: 'discount',
             dataIndex: 'discount',
             defaultSortOrder: 'ascend',
-            // sorter: (a, b) => a.discount - b.discount,
-            // render: (discount) => `${discount} %`,
+            sorter: (a, b) => a.discount - b.discount,
+            render: (discount) => `${discount} %`,
         },
         {
             title: 'Đánh giá',
@@ -101,40 +104,50 @@ class SeeProduct extends Component {
             dataIndex: 'rate',
             // render: (rate) => this.calStar(rate).toFixed(1),
         },
-        // {
-        //     title: 'Hành động',
-        //     key: 'actions',
-        //     fixed: 'right',
-        //     width: 100,
-        //     render: (text) => (
-        //         <>
-        //             <DeleteOutlined
-        //                 onClick={() => setModalDel({ visible: true, _id: text._id })}
-        //                 className="m-r-8 action-btn-product"
-        //                 style={{ color: 'red' }}
-        //             />
-        //             <Tooltip title="Chỉnh sửa" placement="left">
-        //                 <EditOutlined
-        //                     onClick={() => {
-        //                         setEditModal({ visible: true, product: { ...text } });
-        //                     }}
-        //                     className="m-r-8 action-btn-product"
-        //                     style={{ color: '#444' }}
-        //                 />
-        //             </Tooltip>
+        {
+            title: 'Hành động',
+            key: 'actions',
+            fixed: 'right',
+            width: 100,
+            render: (text) => (
+                <>
+                    <DeleteOutlined
+                        // onClick={() => setModalDel({ visible: true, _id: text._id })}
+                        className="m-r-8 action-btn-product"
+                        style={{ color: 'red' }}
+                    />
+                    <Tooltip title="Chỉnh sửa" placement="left">
+                        <EditOutlined
+                            onClick={() => {
+                                this.setEditModal({ visible: true, product: { ...text } });
+                            }}
+                            className="m-r-8 action-btn-product"
+                            style={{ color: '#444' }}
+                        />
+                    </Tooltip>
 
-        //             <Tooltip title="Xem chi tiết" placement="left">
-        //                 <a target="blank" href={`/product/${text._id}`}>
-        //                     <EyeOutlined
-        //                         className="action-btn-product"
-        //                         style={{ color: '#444' }}
-        //                     />
-        //                 </a>
-        //             </Tooltip>
-        //         </>
-        //     ),
-        // },
+                    <Tooltip title="Xem chi tiết" placement="left">
+                        <a target="blank" href={`/product/${text._id}`}>
+                            <EyeOutlined
+                                className="action-btn-product"
+                                style={{ color: '#444' }}
+                            />
+                        </a>
+                    </Tooltip>
+                </>
+            ),
+        },
     ];
+
+    // modal edit 
+    setEditModal = (modalData) => {
+        this.setState({
+            editModal: {
+                ...this.state.editModal,
+                ...modalData,
+            },
+        });
+    }
 
     // fn: hàm rút gọn tên sản phẩm
     reduceProductName = (name, length = 64) => {
@@ -186,7 +199,10 @@ class SeeProduct extends Component {
         const newList = this.state.list.map((item) =>
             item._id !== newProduct._id ? item : { ...item, ...newProduct },
         );
-        this.setState({ list: newList, editModal: { visible: false } });
+        this.setState({
+            list: newList,
+            editModal: { visible: false }
+        });
     };
 
     // Event: get all products
@@ -201,16 +217,29 @@ class SeeProduct extends Component {
     getProductList = async () => {
         try {
             this.setState({ isLoading: true });
-
-            // Make the API call to get the product list
             const response = await getAPIProductList();
 
-            // Check if the response and data exist
             if (response && response.data && response.code === 0) {
-                const { data } = response.data;
+                const data = response.data;
 
-                const list = data.map((item) => ({ ...item, key: item.id_product }));
-                this.setState({ list, isLoading: false });
+                const newList = data.map((item) => {
+                    return {
+                        key: item.id_product,
+                        code: item.code,
+                        name: item.name,
+                        type: item.type,
+                        price: item.price,
+                        brand: item.brand,
+                        stock: item.stock,
+                        discount: item.discount,
+                        rate: item.rate,
+                    };
+                });
+
+                this.setState({ list: newList, isLoading: false });
+
+                // const list = data.map((item) => ({ ...item, key: item.id_product }));
+                // this.setState({ list, isLoading: false });
             } else {
                 message.error('Lấy danh sách Sản phẩm thất bại');
                 this.setState({ isLoading: false });
@@ -224,28 +253,32 @@ class SeeProduct extends Component {
         }
     }
 
-    render() {// JSX
-        const { list, isLoading, editModal, modalDel } = this.state;
+    render() {
+        // JSX
+        const { list, isLoading } = this.state;
+        const { visible, product } = this.state.editModal;
+
         return (
             <div className="pos-relative p-8">
-                {isLoading ? (
-                    <Spin
-                        tip="Đang tải danh sách sản phẩm ..."
-                        size="large"
-                        className="trans-center"
-                    />
-                ) : (
-                    <Table
-                        pagination={{
-                            pageSize: 10,
-                            position: ['bottomCenter'],
-                            showSizeChanger: false,
-                        }}
-                        className="admin-see-product"
-                        columns={this.columns}
-                        dataSource={this.state.list}
-                    />
-                )}
+
+                {/* Rest of your code */}
+
+                <Table
+                    pagination={{
+                        position: ['bottomCenter'],
+                        showLessItems: true,
+                    }}
+                    className="admin-see-product"
+                    columns={this.columns}
+                    dataSource={list} // Updated this line
+                />
+
+                {/* edit product modal */}
+                <EditProductModal
+                    visible={visible}
+                    onClose={(value) => this.onCloseEditModal(value)}
+                    product={product}
+                />
             </div>
         );
     }

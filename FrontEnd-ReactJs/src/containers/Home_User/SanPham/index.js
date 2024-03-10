@@ -1,17 +1,10 @@
 import { Col, Pagination, Row, Spin } from 'antd';
-import Slider from "react-slick";
-import { FormattedMessage } from 'react-intl';
+// import productApi from 'apis/productApi';
+import ProductView from '../../../components/ProductView';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { LANGUAGES } from '../../../utils';
-import { changeLanguageApp } from '../../../store/actions';
 
-
-// giao diện trong components
-import ProductView from "../../../components/ProductView";
-
-import './FlashSale.scss';
+import "./index.scss";
 
 const mockProducts = [
     {
@@ -342,16 +335,31 @@ const mockProducts = [
         discount: 10,
         stock: 10,
     },
+    {
+        _id: '5',
+        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+        name: 'Product 1',
+        price: 50,
+        discount: 10,
+        stock: 10,
+    },
+    {
+        _id: '5',
+        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+        name: 'Product 1',
+        price: 50,
+        discount: 10,
+        stock: 10,
+    },
 ];
-
-class FlashSale extends Component {
+class AllProduct extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             list: mockProducts,
             currentPage: 1,
-            productsPerPage: 4,
+            productsPerPage: 16,
             total: mockProducts.length,
             isLoading: false,
         };
@@ -419,56 +427,45 @@ class FlashSale extends Component {
         });
     };
 
+    // handlePageChange = (page) => {
+    //     // this.setState({ page }, () => {
+    //     //     this.getAllProducts();
+    //     // });
+    // };
+
     handlePageChange = (page) => {
         this.setState({
             currentPage: page,
         });
     };
 
-    // chuyển ngôn ngữ
-    changeLanguage = (language) => {
-        this.props.changeLanguageAppRedux(language);
-    }
-
     render() {
         const { list, isLoading, currentPage, productsPerPage, total } = this.state;
         const totalPages = Math.ceil(total / productsPerPage);
 
         return (
-            <Row className="p-16 page" style={{ minHeight: 400 }} gutter={[16, 16]}>
+            <Row className="p-16" style={{ minHeight: 400 }} gutter={[16, 16]}>
                 <Col span={24}>
-                    <h2 className="font-weight-700">Flash Sale</h2>
+                    <h2 className="font-weight-700">Tất cả sản phẩm</h2>
                     <div className="underline-title"></div>
                 </Col>
-                {this.showProducts(list)}
-                <Col className="item" span={24}>
-                    <Pagination
-                        className="nut"
-                        current={currentPage}
-                        pageSize={productsPerPage}
-                        total={total}
-                        onChange={this.handlePageChange}
-                        showSizeChanger={false}
-                    />
-                </Col>
+
+                <>
+                    {this.showProducts(list)}
+                    <Col className="item" span={24}>
+                        <Pagination
+                            className="nut"
+                            current={currentPage}
+                            pageSize={productsPerPage}
+                            total={total}
+                            onChange={this.handlePageChange}
+                            showSizeChanger={false}
+                        />
+                    </Col>
+                </>
             </Row>
         );
     }
 }
 
-// map redux đến react
-const mapStateToProps = state => {
-    return {
-        isLoggedIn: state.user.isLoggedIn,
-        language: state.app.language,
-    };
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(FlashSale);
-
+export default AllProduct;

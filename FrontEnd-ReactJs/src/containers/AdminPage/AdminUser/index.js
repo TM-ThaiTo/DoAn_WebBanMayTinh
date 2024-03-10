@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, message, Popconfirm, Spin, Table } from 'antd';
-
 import { getAllAdmin } from '../../../services/adminService';
-// import { push } from "connected-react-router";
-// import * as actions from "../../store/actions";
-// import './index.scss';
-
 
 class AdminUser extends Component {
 

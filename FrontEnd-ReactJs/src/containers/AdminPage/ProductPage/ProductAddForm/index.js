@@ -254,7 +254,7 @@ class ProductAddForm extends Component {
             const catalogs = this.state.fileCompressedList.map((item) => item.data);
 
             // tổng hợp detail (shareDetails, prvDetails)
-            const { capacity, processorCount, weight,
+            const { capacity, processorCount, weight, frequency, wattage, strong,
                 warranty,
                 ...prvDetailsWithoutWarranty } = rest;
 
@@ -265,28 +265,32 @@ class ProductAddForm extends Component {
                 },
                 prvDetails: {
                     [this.state.infoDetail]: {
+                        // disk
                         ...(capacity && { capacity: capacity.toString() }),
+                        //laptop
                         ...(processorCount && { processorCount: processorCount.toString() }),
                         ...(weight && { weight: weight.toString() }),
-
+                        // màn hinh
+                        ...(frequency && { frequency: frequency.toString() }),
+                        // speaker
+                        ...(wattage && { wattage: wattage.toString() }),
+                        // router wifi
+                        ...(strong && { strong: strong.toString() }),
 
                         ...prvDetailsWithoutWarranty,
                     }
                 },
             };
-
             const dataSend = { product, details, desc: this.state.productDecs };
-
-            // const response = await postAddProduct(dataSend);
-            // if (response.code === 0) {
-            //     this.setState({ isSubmitting: false });
-            //     message.success('Thêm sản phẩm thành công');
-            // }
-            // else {
-            //     console.log("check respone: ", response);
-            // }
-
-            console.log("check datasend: ", dataSend);
+            const response = await postAddProduct(dataSend);
+            if (response.code === 0) {
+                this.setState({ isSubmitting: false });
+                message.success('Thêm sản phẩm thành công');
+            }
+            else {
+                console.log("check respone: ", response);
+            }
+            // console.log("check datasend: ", dataSend.details);
         }
         catch (error) {
             this.setState({ isSubmitting: false });
@@ -300,7 +304,6 @@ class ProductAddForm extends Component {
 
     render() {
         const { isTypeSelected, avtFileList, fileList, isSubmitting, infoDetail } = this.state;
-
         console.log("check info: ", this.state.infoDetail);
         return (
             <div className="Admin-Product-Page">

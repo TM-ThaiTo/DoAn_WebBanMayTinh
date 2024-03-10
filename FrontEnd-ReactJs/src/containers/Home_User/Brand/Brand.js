@@ -3,83 +3,81 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { LANGUAGES } from '../../../utils';
 import { changeLanguageApp } from '../../../store/actions';
-import Product from '../../../components/Product/ProductCard/Product_front_one.js'
-
+import { Col, Row } from 'antd';
 // scss
 import './Brand.scss'
+
+
+// danh sách thương hiệu
+const list = [
+    {
+        link: 'https://vn.msi.com/',
+        src:
+            'https://res.cloudinary.com/duvnxrvqr/image/upload/v1710038929/Image/Brand/MSI.webp',
+        title: 'MSI',
+        desc: 'MSI Gaming: Power for Gamers',
+    },
+    {
+        link: 'https://www.apple.com/',
+        src:
+            'https://res.cloudinary.com/duvnxrvqr/image/upload/v1710038389/Image/faftdahg9vj5xq9nrk8u.jpg',
+        title: 'Apple',
+        desc: 'Think Different',
+    },
+    {
+        link: 'https://www.lenovo.com/vn/vn/',
+        src:
+            'https://res.cloudinary.com/duvnxrvqr/image/upload/v1710038963/Image/Brand/Lenovo.webp',
+        title: 'LENOVO',
+        desc: 'Different Plays Better',
+    },
+    {
+        link: 'https://www.asus.com/vn/',
+        src:
+            'https://res.cloudinary.com/duvnxrvqr/image/upload/v1710038979/Image/Brand/Asus.webp',
+        title: 'ASUS',
+        desc: 'The Best or Nothing',
+    },
+];
+
 class Brand extends Component {
+
+    // fn: hiển thị danh sách thương hiệu
+    showBrandList(list) {
+        return list.map((item, index) => (
+            <Col span={12} md={6} key={index}>
+                <div className="brand-item t-center">
+                    <a href={item.link} target="blank">
+                        <img className="img" width="100%" src={item.src} alt="Photo" />
+                    </a>
+                    <h4 className="font-size-18px">{item.title}</h4>
+                    <span className="font-size-16px">{item.desc}</span>
+                </div>
+            </Col>
+        ));
+    }
+
 
     // chuyển ngôn ngữ
     changeLanguage = (language) => {
         this.props.changeLanguageAppRedux(language);
     }
-
     render() {
-        let language = this.props.language;
+
         return (
-            <React.Fragment>
-                <div className='container brand'>
-
-                    <div className='row title-brand'>
-                        Thương hiệu nổi bật
-                    </div>
-
-                    <div className='items-brand'>
-                        <div className='apple'>
-                            <a href='https://www.apple.com/' target='black'>
-                                <div className='image-Apple img-design'></div>
-                            </a>
-                            <div className='name-slogan'>
-                                <span >Apple</span>
-                            </div>
-                            <div>
-                                <span>"Think Different"</span>
-                                {/* <span> (Suy nghĩ Khác Biệt)</span> */}
-                            </div>
-                        </div>
-
-                        <div className='msi'>
-                            <a href='https://vn.msi.com/' target='black'>
-                                <div className='image-MSI img-design'></div>
-                            </a>
-                            <div className='name-slogan'>
-                                <span >MSI</span>
-                            </div>
-                            <div>
-                                <span>MSI Gaming: Power for Gamers</span>
-                            </div>
-                        </div>
-
-                        <div className='lenovo'>
-                            <a href='https://www.lenovo.com/vn/vn/' target='black'>
-                                <div className='image-LENOVO img-design'></div>
-                            </a>
-                            <div className='name-slogan'>
-                                <span >LENOVO</span>
-                            </div>
-                            <div>
-                                <span>"Different Plays Better"</span>
-                                {/* <span>(Chơi Tốt Hơn khi Khác Biệt)</span> */}
-                            </div>
-
-                        </div>
-                        <div className='asus'>
-                            <a href='https://www.asus.com/vn/' target='black'>
-                                <div className='image-ASUS img-design'></div>
-                            </a>
-                            <div className='name-slogan'>
-                                <span >ASUS</span>
-                            </div>
-                            <div>
-                                <span>"The Best or Nothing"</span>
-                                {/* <span>(Chỉ Có Tốt Nhất hoặc Không Có Gì)</span> */}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </React.Fragment>
+            <div className="p-16 Famous-Brand">
+                <Row gutter={[16, 16]}>
+                    <Col span={24}>
+                        <h2 className="font-weight-700">Thương hiệu nổi bật</h2>
+                        <div className="underline-title"></div>
+                    </Col>
+                    {this.showBrandList(list)}
+                </Row>
+            </div>
         );
     }
+
+
 }
 
 // map redux đến react
