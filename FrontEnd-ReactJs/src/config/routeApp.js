@@ -4,17 +4,17 @@ import { PATH } from "../utils";
 import { userIsAuthenticated, userIsNotAuthenticated } from '../hoc/authentication';
 
 // các route
-import Home from "../routes/Home";
 import HomePage from "../containers/Home_User/HomePage_User";
 import Login_User from "../containers/Home_User/Login_Signup_User/Login_User/Login_User";
 import SignUp_User from "../containers/Home_User/Login_Signup_User/SignUp_User/SignUp_User";
 import ForgotPassword from '../containers/Home_User/Login_Signup_User/ForgotPassword/ForgotPassword.js';
-// import AllProduct from '../containers/Home_User/SanPham/All_Products/AllProduct.js';
 import AllFlashSale from '../containers/Home_User/FlashSale/ALL_FlashSale/AllFlashSale.js';
 import NotFound from '../components/NotFound/NotFound.js';
-import Product_View from '../components/Product/ProductView/Product_View';
+
 import AdminPage from '../containers/AdminPage/index.js';
 
+// import Product_View from '../components/Product/ProductView/Product_View';
+import ProductDetailPage from '../containers/ProductDetailPage/index.js';
 const routes = [
     {
         path: PATH.ADMIN,
@@ -39,16 +39,11 @@ const routes = [
     {
         path: PATH.HOME,
         exact: true,
-        main: () => <Home />
-    },
-    {
-        path: PATH.HOMEPAGE,
-        exact: false,
         main: () => <HomePage />
     },
     {
         path: PATH.PRODUCT,
-        main: () => <Product_View />
+        main: () => <ProductDetailPage />
     },
     {
         path: PATH.NOT_FOUND,

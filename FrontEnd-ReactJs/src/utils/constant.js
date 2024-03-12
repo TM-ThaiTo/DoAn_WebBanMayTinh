@@ -5,11 +5,11 @@ export const PATH = {
     SIGNUP: '/signup',
     ADMIN: '/admin',
     LOG_OUT: '/logout',
-    PRODUCT: '/product',
     LOGIN_USER: '/login-user',
     SIGNUP_USER: '/signup-user',
     FORGOTPASSWORD: '/login/forgot',
 
+    PRODUCT: '/product/:productId',
     SYSTEM: '/system',
     ALL_FLASHSALE: '/all_flashsale',
     ALL_PRODUCT: '/all_product',
