@@ -4,365 +4,375 @@ import ProductView from '../../../components/ProductView';
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
+import { getAPIProductList } from '../../../services/adminService';
+
 import "./index.scss";
 
-const mockProducts = [
-    {
-        _id: '1',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1 sdasdsdsa',
-        price: 200000,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '2',
-        avt: 'https://example.com/product2.jpg',
-        name: 'Product 2',
-        price: 75,
-        discount: 15,
-        stock: 5,
-    },
-    {
-        _id: '3',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '4',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 2,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-    {
-        _id: '5',
-        avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
-        name: 'Product 1',
-        price: 50,
-        discount: 10,
-        stock: 10,
-    },
-];
+// const mockProducts = [
+//     {
+//         _id: '1',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1 sdasdsdsa',
+//         price: 200000,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '2',
+//         avt: 'https://example.com/product2.jpg',
+//         name: 'Product 2',
+//         price: 75,
+//         discount: 15,
+//         stock: 5,
+//     },
+//     {
+//         _id: '3',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '4',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 2,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+//     {
+//         _id: '5',
+//         avt: 'https://res.cloudinary.com/duvnxrvqr/image/upload/v1709965609/products/R-001/pceor7catdbsi0htuvav.jpg',
+//         name: 'Product 1',
+//         price: 50,
+//         discount: 10,
+//         stock: 10,
+//     },
+// ];
 class AllProduct extends Component {
     constructor(props) {
         super(props);
 
+        // this.state = {
+        //     list: mockProducts,
+        //     currentPage: 1,
+        //     productsPerPage: 16,
+        //     total: mockProducts.length,
+        //     isLoading: false,
+        // };
         this.state = {
-            list: mockProducts,
+            list: [],
             currentPage: 1,
             productsPerPage: 16,
-            total: mockProducts.length,
-            isLoading: false,
+            total: 0,
+            isLoading: true,
         };
+
     }
 
     componentDidMount() {
@@ -377,28 +387,31 @@ class AllProduct extends Component {
     }
 
     getAllProducts = async () => {
-        // try {
-        //   this.cancelToken = productApi.CancelToken.source();
-        //   const response = await productApi.getAllProducts(
-        //     this.state.page,
-        //     24,
-        //     this.cancelToken.token
-        //   );
+        try {
+            //   this.cancelToken = productApi.CancelToken.source();
+            //   const response = await productApi.getAllProducts(
+            //     this.state.page,
+            //     24,
+            //     this.cancelToken.token
+            //   );
 
-        //   if (response) {
-        //     const { data, count } = response.data;
-        //     this.setState({
-        //       list: data,
-        //       total: count,
-        //       isLoading: false,
-        //     });
-        //   }
-        // } catch (error) {
-        //   if (!productApi.isCancel(error)) {
-        //     // Handle non-cancel errors
-        //     this.setState({ isLoading: false });
-        //   }
-        // }
+            const response = await getAPIProductList();
+            if (response) {
+                const data = response.data;
+                this.setState({
+                    list: data,
+                    // total: count,
+                    isLoading: false,
+                });
+            }
+        } catch (error) {
+            // if (!productApi.isCancel(error)) {
+            //     // Handle non-cancel errors
+            //     this.setState({ isLoading: false });
+            // }
+
+            console.log("Lỗi: ", error);
+        }
     };
 
     showProducts = (list) => {
@@ -407,11 +420,12 @@ class AllProduct extends Component {
         const indexOfLastProduct = currentPage * productsPerPage;
         const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
         const currentProducts = list.slice(indexOfFirstProduct, indexOfLastProduct);
+
         return currentProducts.map((product, index) => {
-            const { avt, name, price, discount, stock, _id } = product;
+            const { avt, name, price, discount, stock, id_product } = product;
             return (
                 <Col key={index} span={24} sm={12} lg={8} xl={6}>
-                    <Link to={`/product/${_id}`}>
+                    <Link to={`/product/${id_product}`}>
                         <ProductView
                             className="m-auto"
                             name={name}
@@ -426,12 +440,6 @@ class AllProduct extends Component {
             );
         });
     };
-
-    // handlePageChange = (page) => {
-    //     // this.setState({ page }, () => {
-    //     //     this.getAllProducts();
-    //     // });
-    // };
 
     handlePageChange = (page) => {
         this.setState({

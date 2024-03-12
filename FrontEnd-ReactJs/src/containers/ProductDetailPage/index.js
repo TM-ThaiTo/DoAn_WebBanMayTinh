@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-// import giao diện
+import { getProductById } from '../../services/productService.js';
 import ProductDetail from '../../components/ProductDetail';
-
+import GlobalLoading from '../../components/Loading/Global/index.js';
 
 class ProductDetailPage extends Component {
     constructor(props) {
@@ -13,6 +13,8 @@ class ProductDetailPage extends Component {
             product: null,
             isNotFoundProduct: false,
         };
+
+        this.isComponentMounted = true;
     }
 
     componentDidMount() {
@@ -20,36 +22,36 @@ class ProductDetailPage extends Component {
     }
 
     componentWillUnmount() {
-        this.isSubscribe = false;
+        this.isComponentMounted = false; // Fix the typo here
     }
 
     getProduct = async () => {
-        this.isSubscribe = true;
         const productId = this.props.match.params.productId;
-        console.log("Check id: ", productId);
-
-        // try {
-        //   const res = await productApi.getProduct(productId);
-        //   if (res && res.code === 0) {
-        //     const { data } = result;
-        //     this.setState({ product: data });
-        //   }
-        // } catch (error) {
-        //   if (this.isSubscribe) this.setState({ isNotFoundProduct: true });
-        // }
+        const res = await getProductById(productId);
+        try {
+            if (res && res.code === 0) {
+                const data = res.data;
+                this.setState({ product: data });
+            }
+        } catch (error) {
+            if (this.isComponentMounted) {
+                this.setState({ isNotFoundProduct: true });
+            }
+        }
     };
 
     render() {
+        const { product, isNotFoundProduct } = this.state; // Destructure the state
+
         return (
-            //         <>
-            //   {product ? (
-            //     <ProductDetail products={product} />
-            //   ) : (
-            //     <GlobalLoading content="Đang tải sản phẩm ..." />
-            //   )}
-            //   {isNotFoundProduct && <Redirect to="/not-found" />}
-            // </>
-            <ProductDetail />
+            <>
+                {product ? (
+                    <ProductDetail dataProduct={product} />
+                ) : (
+                    <GlobalLoading content="Đang tải sản phẩm ..." />
+                )}
+                {isNotFoundProduct && <Redirect to="/not-found" />}
+            </>
         );
     }
 }
@@ -64,5 +66,4 @@ const mapDispatchToProps = dispatch => {
     return {};
 };
 
-// Connect withRouter to get match props
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ProductDetailPage));
