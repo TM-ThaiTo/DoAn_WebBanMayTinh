@@ -10,6 +10,8 @@ import { connect } from 'react-redux';
 import ProductPolicy from './Policy/index.js';
 import ProductOverview from './Overview/index.js'
 import Description from './Description/index.js';
+
+import './index.scss';
 class ProductDetail extends Component {
 
 
@@ -27,17 +29,16 @@ class ProductDetail extends Component {
                     {/* Hiển thị đường dẫn trang */}
                     <Col span={24} className="d-flex page-position">
                         <Link to="/">
-                            <HomeOutlined className="p-12 icon-home font-size-16px bg-white" />
+                            <HomeOutlined className="p-12 icon-home font-size-16px bg-white font" />
                         </Link>
-                        <span className="r-arrow p-lr-8 font-weight-500">{`>`}</span>
-                        <span className="pro-name p-8 font-weight-500 bg-white">{name}</span>
+                        <span className="r-arrow p-lr-8 font-weight-500 font">{`>`}</span>
+                        <span className="pro-name p-8 font-weight-500 bg-white font">{name}</span>
                     </Col>
 
                     {/* Thông tin cơ bản của sản phẩm */}
                     <Col span={24} md={18}>
                         <ProductOverview dataProduct={dataProduct} />
                     </Col>
-
 
                     {/* Chính sách */}
                     <Col span={24} md={6}>
@@ -51,6 +52,21 @@ class ProductDetail extends Component {
                             desc={dataProduct.desc}
                         />
                     </Col>
+
+                    {/* Nhận xét của khách hàng */}
+                    {/* <Col span={24} id="evaluation">
+                    <Evaluation rates={rate} productId={_id} />
+                    </Col> */}
+
+                    {/* danh sách sản phẩm tương tự */}
+                    {/* <Col span={24}>
+                    <RelatedProduct
+                        title="Sản phẩm tương tự"
+                        type={type}
+                        brand={brand}
+                        id={_id}
+                    />
+                    </Col> */}
 
                 </Row>
             </div>

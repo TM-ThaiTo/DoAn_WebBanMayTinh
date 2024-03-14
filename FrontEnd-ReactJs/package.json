@@ -13,6 +13,7 @@
     "compressorjs": "^1.0.6",
     "connected-react-router": "^6.9.1",
     "dotenv": "^8.2.0",
+    "formik": "^2.4.5",
     "lodash": "^4.17.21",
     "moment": "^2.29.0",
     "node-sass": "^6.0.0",
@@ -42,7 +43,8 @@
     "redux-state-sync": "^2.1.0",
     "redux-thunk": "^2.3.0",
     "slick-carousel": "^1.8.1",
-    "typescript": "^4.3.2"
+    "typescript": "^4.3.2",
+    "yup": "^1.4.0"
   },
   "scripts": {
     "start": "react-scripts start",

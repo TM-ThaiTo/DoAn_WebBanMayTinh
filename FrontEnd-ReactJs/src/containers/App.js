@@ -14,6 +14,8 @@ import routesConfig from '../config/routeApp.js';
 
 // các giao diện admin
 import NotFound from '../components/NotFound/NotFound.js';
+import Header_Top from './Home_User/Header/Header_Top/Header_HomePage_User.js';
+import Header_Logo from './Home_User/Header/Header_Logo/Header_Logo.js';
 class App extends Component {
 
     handlePersistorState = () => {
@@ -42,7 +44,8 @@ class App extends Component {
                         <ConfirmModal />
                         <div className="content-container">
                             <CustomScrollbars style={{ height: '100vh', width: '100%' }}>
-
+                                {/* <Header_Top /> */}
+                                {/* <Header_Logo /> */}
                                 <Switch>
                                     {renderRoutes(routes)};
                                     <Route>

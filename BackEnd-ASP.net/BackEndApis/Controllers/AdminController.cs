@@ -1028,29 +1028,49 @@ namespace BackEndApis.Controllers
                 return Ok(new
                 {
                     code = 0,
-                    product = product,
-                    desc = descProduct,
-                    detail = detailData,
+                    data = new
+                    {
+                        product = product,
+                        desc = descProduct,
+                        detail = detailData,
+                    },
                 });
             }
             else
             {
                 try
                 {
-                    var products = _db.Products.Select(u => new Info.InfoProduct
+                    int page = 1; // Default page
+                    int pageSize = 10; // Default page size
+
+                    // Get page parameter from the request, if provided
+                    if (Request.Query.ContainsKey("page") && int.TryParse(Request.Query["page"], out int requestedPage))
                     {
-                        id_product = u.Id,
-                        code = u.Code!,
-                        name = u.Name!,
-                        price = Convert.ToInt32(u.Price),
-                        type = u.Type!,
-                        brand = u.Brand!,
-                        avt = u.Avt!,
-                        stock = u.Stock,
-                        discount = u.Discount!,
-                        rate = u.Rate,
-                        other_info = u.OtherInfo!,
-                    }).ToList();
+                        page = requestedPage;
+                    }
+
+                    // Calculate the number of items to skip based on the page size and requested page
+                    int skipCount = (page - 1) * pageSize;
+
+                    var products = _db.Products
+                        .OrderBy(u => u.Id) // Order by an appropriate property (e.g., Id)
+                        .Skip(skipCount)
+                        .Take(pageSize)
+                        .Select(u => new Info.InfoProduct
+                        {
+                            id_product = u.Id,
+                            code = u.Code!,
+                            name = u.Name!,
+                            price = Convert.ToInt32(u.Price),
+                            type = u.Type!,
+                            brand = u.Brand!,
+                            avt = u.Avt!,
+                            stock = u.Stock,
+                            discount = u.Discount!,
+                            rate = u.Rate,
+                            other_info = u.OtherInfo!,
+                        })
+                        .ToList();
 
                     return Ok(new
                     {

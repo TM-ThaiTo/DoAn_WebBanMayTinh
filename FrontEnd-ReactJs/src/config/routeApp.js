@@ -5,7 +5,7 @@ import { userIsAuthenticated, userIsNotAuthenticated } from '../hoc/authenticati
 
 // các route
 import HomePage from "../containers/Home_User/HomePage_User";
-import Login_User from "../containers/Home_User/Login_Signup_User/Login_User/Login_User";
+import Login_User from "../containers/Home_User/Login_Signup_User/Login_User/index.js";
 import SignUp_User from "../containers/Home_User/Login_Signup_User/SignUp_User/SignUp_User";
 import ForgotPassword from '../containers/Home_User/Login_Signup_User/ForgotPassword/ForgotPassword.js';
 import AllFlashSale from '../containers/Home_User/FlashSale/ALL_FlashSale/AllFlashSale.js';

@@ -33,6 +33,9 @@ class ProductDetailPage extends Component {
                 const data = res.data;
                 this.setState({ product: data });
             }
+            else {
+                this.setState({ isNotFoundProduct: true });
+            }
         } catch (error) {
             if (this.isComponentMounted) {
                 this.setState({ isNotFoundProduct: true });
@@ -41,7 +44,7 @@ class ProductDetailPage extends Component {
     };
 
     render() {
-        const { product, isNotFoundProduct } = this.state; // Destructure the state
+        const { product, isNotFoundProduct } = this.state;
 
         return (
             <>

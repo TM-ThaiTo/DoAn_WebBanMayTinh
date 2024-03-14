@@ -17,11 +17,9 @@ import Banner from './Banner/Banner';
 import FlashSale from './FlashSale/FlashSale.js';
 import Brand from './Brand/Brand.js';
 
-
 import Laptop from './DoanhMuc/Laptop/index.js';
 import ManHinh from './DoanhMuc/ManHinh/index.js';
 import Gear from './DoanhMuc/Gear/index.js';
-
 
 import DoanhMuc from './DoanhMuc/index.js';
 // import All_Products from './SanPham/All_Products.js';

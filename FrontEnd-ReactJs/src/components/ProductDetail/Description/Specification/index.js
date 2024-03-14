@@ -14,13 +14,13 @@ const convertProductKey = (key) => {
         case 'display':
             return 'Card màn hình';
         case 'displaySize':
-            return 'Kích thước màn hình';
+            return 'Màn hình';
         case 'operating':
             return 'Hệ điều hành';
         case 'pin':
             return 'Dung lượng pin';
         case 'processorCount':
-            return 'Số lượng CPU';
+            return 'Số lượng nhân';
         case 'ram':
             return 'RAM (GB)';
         case 'series':
@@ -62,7 +62,7 @@ class Specification extends Component {
     renderSpecification(list) {
         return list.map((item, index) => (
             <div key={index} className="Specification-item d-flex p-12">
-                <span className="font-size-16px" style={{ flexBasis: 150 }}>
+                <span className="font-size-16px" style={{ flexBasis: 130 }}>
                     {item.key}
                 </span>
                 <span className="font-size-16px flex-grow-1">{item.value}</span>
@@ -73,7 +73,6 @@ class Specification extends Component {
     render() {
         const { detail } = this.props;
         const list = this.listSpecification(detail);
-        console.log("Check list in Specification component: ", list);
 
         return (
             <div className="Specification p-t-16">
