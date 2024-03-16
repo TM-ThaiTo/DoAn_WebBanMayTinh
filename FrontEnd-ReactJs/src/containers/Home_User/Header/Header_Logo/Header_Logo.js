@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import { LANGUAGES } from '../../../../utils/index.js';
 import { changeLanguageApp } from '../../../../store/actions/index.js';
-import CustomScrollbars from '../../../../components/CustomScrollbars.js';
+// import CustomScrollbars from '../../../../components/CustomScrollbars.js';
 import './Header_Logo.scss';
 
 class Header_Logo extends Component {

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Fragment, Suspense } from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { ConnectedRouter as Router } from 'connected-react-router';
@@ -7,15 +7,21 @@ import { ToastContainer } from 'react-toastify';
 import { userIsAuthenticated, userIsNotAuthenticated } from '../hoc/authentication';
 import { PATH } from '../utils'
 import ConfirmModal from '../components/ConfirmModal';
-import CustomScrollbars from '../components/CustomScrollbars.js';
+// import CustomScrollbars from '../components/CustomScrollbars.js';
 
 // cac route
 import routesConfig from '../config/routeApp.js';
 
-// các giao diện admin
+// các giao diện
 import NotFound from '../components/NotFound/NotFound.js';
+import GlobalLoading from '../components/Loading/Global/index.js';
 import Header_Top from './Home_User/Header/Header_Top/Header_HomePage_User.js';
 import Header_Logo from './Home_User/Header/Header_Logo/Header_Logo.js';
+
+
+import HeaderView from '../components/HeaderView/index.js';
+
+
 class App extends Component {
 
     handlePersistorState = () => {
@@ -42,18 +48,22 @@ class App extends Component {
                 <Router history={history}>
                     <div className="main-container">
                         <ConfirmModal />
-                        <div className="content-container">
-                            <CustomScrollbars style={{ height: '100vh', width: '100%' }}>
+                        <Suspense fallback={<GlobalLoading />}>
+
+                            <div className="content-container">
+                                {/* <CustomScrollbars style={{ height: '100vh', width: '100%' }}> */}
                                 {/* <Header_Top /> */}
                                 {/* <Header_Logo /> */}
+                                <HeaderView />
                                 <Switch>
                                     {renderRoutes(routes)};
                                     <Route>
                                         <NotFound />
                                     </Route>
                                 </Switch>
-                            </CustomScrollbars>
-                        </div>
+                                {/* </CustomScrollbars> */}
+                            </div>
+                        </Suspense>
 
                         <ToastContainer
                             position="bottom-right"

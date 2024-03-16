@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { FormattedMessage, FormattedTime } from 'react-intl';
 
-import CustomScrollBar from '../components/CustomScrollbars';
+// import CustomScrollBar from '../components/CustomScrollbars';
 
 import './CustomToast.scss';
 
@@ -21,7 +21,7 @@ class CustomToast extends Component {
                         <i className="fa fa-fw fa-exclamation-triangle" />
                         <FormattedMessage id={titleId} />
                     </div>
-                    {
+                    {/* {
                         (message && typeof message === 'object') ?
                             <CustomScrollBar autoHeight={true} autoHeightMin={50} autoHeightMax={100}>
                                 {
@@ -37,7 +37,7 @@ class CustomToast extends Component {
                             <div className="toast-content">
                                 {message ? message : (messageId ? (<FormattedMessage id={messageId} />) : null)}
                             </div>
-                    }
+                    } */}
                 </div>
             </Fragment>
         );
