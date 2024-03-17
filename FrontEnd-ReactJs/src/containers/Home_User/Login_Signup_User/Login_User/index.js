@@ -18,6 +18,9 @@ import { Link } from 'react-router-dom';
 import * as Yup from 'yup';
 import './index.scss';
 
+
+import { post_loginuser } from '../../../../services/userService';
+
 class Login_User extends Component {
     constructor(props) {
         super(props);
@@ -46,36 +49,38 @@ class Login_User extends Component {
         // } catch (error) {
         //     message.error('Lỗi đăng nhập.');
         // }
+        console.log("Check login: ");
     };
 
     // fn: đăng nhập
     onLogin = async (account) => {
-        // try {
-        //   this.setState({ isSubmitting: true });
-        //   const result = await loginApi.postLogin({ account });
-        //   if (result.status === 200) {
-        //     this.onLoginSuccess(result.data);
-        //   }
-        // } catch (error) {
-        //   this.setState({ isSubmitting: false });
-        //   if (error.response) {
-        //     const { failedLoginTimes } = error.response.data;
-        //     const messageError = error.response.data.message;
-        //     if (failedLoginTimes >= constants.MAX_FAILED_LOGIN_TIMES) {
-        //       message.error(
-        //         'Vượt quá số lần đăng nhập.\nKiểm tra email hoặc nhấn "Quên mật khẩu"',
-        //         4,
-        //       );
-        //       this.setState({ isDisableLogin: true });
-        //     } else {
-        //       message.error(messageError);
-        //     }
-        //   } else {
-        //     message.error('Đăng nhập thất bại');
-        //   }
-        // }
+        try {
+            this.setState({ isSubmitting: true });
+            const result = await post_loginuser(account);
+            if (result.status === 200) {
+                this.onLoginSuccess(result.data);
+            }
+        } catch (error) {
+            // this.setState({ isSubmitting: false });
+            // if (error.response) {
+            //     const { failedLoginTimes } = error.response.data;
+            //     const messageError = error.response.data.message;
+            //     if (failedLoginTimes >= constants.MAX_FAILED_LOGIN_TIMES) {
+            //         message.error(
+            //             'Vượt quá số lần đăng nhập.\nKiểm tra email hoặc nhấn "Quên mật khẩu"',
+            //             4,
+            //         );
+            //         this.setState({ isDisableLogin: true });
+            //     } else {
+            //         message.error(messageError);
+            //     }
+            // } else {
+            //     message.error('Đăng nhập thất bại');
+            // }
+            message.error("Lỗi đăng nhập");
+        }
 
-        this.onLoginSuccess("OK");
+        // this.onLoginSuccess("OK");
     };
 
     render() {

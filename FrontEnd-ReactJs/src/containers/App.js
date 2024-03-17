@@ -20,8 +20,9 @@ import Header_Logo from './Home_User/Header/Header_Logo/Header_Logo.js';
 
 
 import HeaderView from '../components/HeaderView/index.js';
-
-
+import ScrollTo from '../components/ScrollTo/index.js';
+import CustomScrollbars from '../components/Custom/ScrollBar/index.js';
+import Footer from './Home_User/Footer/Footer.js';
 class App extends Component {
 
     handlePersistorState = () => {
@@ -46,25 +47,19 @@ class App extends Component {
         return (
             <Fragment>
                 <Router history={history}>
-                    <div className="main-container">
-                        <ConfirmModal />
+                    <CustomScrollbars style={{ height: '100vh', width: '100%' }}>
                         <Suspense fallback={<GlobalLoading />}>
-
-                            <div className="content-container">
-                                {/* <CustomScrollbars style={{ height: '100vh', width: '100%' }}> */}
-                                {/* <Header_Top /> */}
-                                {/* <Header_Logo /> */}
-                                <HeaderView />
-                                <Switch>
-                                    {renderRoutes(routes)};
-                                    <Route>
-                                        <NotFound />
-                                    </Route>
-                                </Switch>
-                                {/* </CustomScrollbars> */}
-                            </div>
+                            {/* <ConfirmModal /> */}
+                            <HeaderView />
+                            <ScrollTo />
+                            <Switch>
+                                {renderRoutes(routes)};
+                                <Route>
+                                    <NotFound />
+                                </Route>
+                            </Switch>
                         </Suspense>
-
+                        <Footer />
                         <ToastContainer
                             position="bottom-right"
                             autoClose={5000}
@@ -77,9 +72,10 @@ class App extends Component {
                             pauseOnHover
                         />
 
-                    </div>
+                    </CustomScrollbars>
+
                 </Router>
-            </Fragment>
+            </Fragment >
         )
     }
 }

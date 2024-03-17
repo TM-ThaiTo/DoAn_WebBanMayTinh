@@ -36,8 +36,8 @@ class HomePage_User extends Component {
         return (
             <>
                 <div className='homepage'>
-                    <Header_Top />
-                    <Header_Logo />
+                    {/* <Header_Top /> */}
+                    {/* <Header_Logo /> */}
                     <Row className="container">
 
                         {/* Banner */}
@@ -74,9 +74,7 @@ class HomePage_User extends Component {
                         <Col span={24} className="m-b-32 hp-01 hp-02">
                             <AllProduct />
                         </Col>
-
                     </Row>
-                    <Footer />
                 </div>
             </>
         );

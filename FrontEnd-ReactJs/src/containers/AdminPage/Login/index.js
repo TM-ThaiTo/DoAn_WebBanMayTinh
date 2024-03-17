@@ -3,29 +3,31 @@ import PropTypes from 'prop-types';
 import { Form, Input, Button, message, Row, Col, Card } from 'antd';
 import './index.scss';
 
-import { postLoginAdmin } from "../../../services/adminService";
+import { postLoginAdmin, getStatus } from "../../../services/adminService";
 
 class Login extends Component {
 
 
     onFinish = async (account) => {
-        // try {
-        //     const response = await postLoginAdmin(account);
-        //     if (response && response.code === 0) {
-        //         message.success('Đăng nhập thành công', 2);
-        //         this.props.onLoginAdmin(true, response.data.fullName);
-        //         console.log("check name: ", response.data.fullName);
-        //     }
-        //     else {
-        //         message.error('Tài khoản không tồn tại hoặc sai mật khẩu');
-        //         this.props.onLoginAdmin(false);
-        //     }
-        // } catch (error) {
-        //     message.error('Tài khoản không tồn tại hoặc sai mật khẩu', 2);
-        //     this.props.onLoginAdmin(false);
-        // }
+        try {
+            const response = await postLoginAdmin(account);
+            console.log("Check code: ", response);
+            // if (response && response.code === 0) {
+            //     message.success('Đăng nhập thành công', 2);
+            //     this.props.onLoginAdmin(true, response.data.fullName);
+            //     console.log("check name: ", response.data.fullName);
+            // }
+            // else {
+            //     message.error('Tài khoản không tồn tại hoặc sai mật khẩu');
+            //     this.props.onLoginAdmin(false);
+            // }
+        } catch (error) {
+            message.error('Tài khoản không tồn tại hoặc sai mật khẩu', 2);
+            this.props.onLoginAdmin(false);
+            //console.log("Check error: ", error);
+        }
 
-        this.props.onLoginAdmin(true, 'OK');
+        //this.props.onLoginAdmin(true, 'OK');
     };
 
     render() {

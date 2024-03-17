@@ -3,7 +3,12 @@ import axios from '../axios';
 // login admin
 const postLoginAdmin = (account) => {
     return axios.post("/api/admin/login-admin", account);
-}
+};
+
+const getStatus = () => {
+    return axios.get("/api/admin/products");
+};
+
 
 // GET lấy danh sách admin
 const getAllAdmin = () => {
@@ -33,4 +38,8 @@ export {
     postAddProduct,
     getAPIProductList,
     postLoginAdmin,
+
+
+    getStatus,
+
 }
