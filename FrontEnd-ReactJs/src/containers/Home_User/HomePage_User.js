@@ -24,7 +24,8 @@ import Gear from './DoanhMuc/Gear/index.js';
 import DoanhMuc from './DoanhMuc/index.js';
 // import All_Products from './SanPham/All_Products.js';
 import Footer from './Footer/Footer.js';
-
+import SaleOff from './SaleOff/index.js';
+import Filter  from '../../components/Filter';
 import AllProduct from './SanPham/index.js';
 
 class HomePage_User extends Component {
@@ -38,12 +39,20 @@ class HomePage_User extends Component {
                 <div className='homepage'>
                     {/* <Header_Top /> */}
                     {/* <Header_Logo /> */}
+
+                    <div className="">
+                        <SaleOff />
+                        <div className="filter-wrapper trans-center container ">
+                            <Filter />
+                        </div>
+                    </div>
+
                     <Row className="container">
 
-                        {/* Banner */}
-                        <Col span={24} >
+                      
+                        {/* <Col span={24} >
                             <Banner />
-                        </Col>
+                        </Col> */}
 
                         {/* flash sale */}
                         <Col span={24} className="m-b-32 hp-01">
