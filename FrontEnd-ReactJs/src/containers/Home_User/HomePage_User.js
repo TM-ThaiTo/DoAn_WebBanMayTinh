@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { Switch, Route } from 'react-router-dom/cjs/react-router-dom.min.js';
-import { path } from '../../utils'
+// import { Switch, Route } from 'react-router-dom/cjs/react-router-dom.min.js';
+// import { path } from '../../utils'
 import { Col, Pagination, Row, Spin } from 'antd';
 
 
@@ -11,9 +11,9 @@ import { Col, Pagination, Row, Spin } from 'antd';
 import './HomePage_User.scss'
 
 // import giao diện của HomeUser
-import Header_Top from './Header/Header_Top/Header_HomePage_User.js';
-import Header_Logo from './Header/Header_Logo/Header_Logo.js'
-import Banner from './Banner/Banner';
+// import Header_Top from './Header/Header_Top/Header_HomePage_User.js';
+// import Header_Logo from './Header/Header_Logo/Header_Logo.js'
+// import Banner from './Banner/Banner';
 import FlashSale from './FlashSale/FlashSale.js';
 import Brand from './Brand/Brand.js';
 
@@ -21,9 +21,12 @@ import Laptop from './DoanhMuc/Laptop/index.js';
 import ManHinh from './DoanhMuc/ManHinh/index.js';
 import Gear from './DoanhMuc/Gear/index.js';
 
-import DoanhMuc from './DoanhMuc/index.js';
+// import DoanhMuc from './DoanhMuc/index.js';
 // import All_Products from './SanPham/All_Products.js';
-import Footer from './Footer/Footer.js';
+// import Footer from './Footer/Footer.js';
+
+import SaleOff from './SaleOff/index.js';
+import Filter from '../../components/Filter/index.js';
 
 import AllProduct from './SanPham/index.js';
 
@@ -35,15 +38,22 @@ class HomePage_User extends Component {
 
         return (
             <>
+
                 <div className='homepage'>
+                    <div class="banner-home">
+                        <SaleOff />
+                        <div class="filter-wrapper trans-center container">
+                            <Filter />
+                        </div>
+                    </div>
                     {/* <Header_Top /> */}
                     {/* <Header_Logo /> */}
                     <Row className="container">
 
                         {/* Banner */}
-                        <Col span={24} >
+                        {/* <Col span={24} >
                             <Banner />
-                        </Col>
+                        </Col> */}
 
                         {/* flash sale */}
                         <Col span={24} className="m-b-32 hp-01">

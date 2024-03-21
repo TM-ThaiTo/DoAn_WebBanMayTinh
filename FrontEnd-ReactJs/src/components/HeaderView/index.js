@@ -99,7 +99,7 @@ class HeaderView extends Component {
         );
 
         return (
-            <div className="wrap-header container-fluid bg-white w-100vw" style={{ height: isSmDevice ? 76 : 104 }}>
+            <div className="hd wrap-header container-fluid bg-white w-100vw" style={{ height: isSmDevice ? 76 : 104 }}>
                 <div className="header header-content container">
 
                     {/* Logo */}

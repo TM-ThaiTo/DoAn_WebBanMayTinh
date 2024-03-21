@@ -18,7 +18,8 @@ class CartView extends Component {
 
     render() {
         const { list } = this.props;
-        const length = list.length;
+        // const length = list.length;
+        // console.log("Check list gio hàng: ", list);
         return (
             <div
                 className="cart-view p-8"
@@ -50,15 +51,22 @@ class CartView extends Component {
                 </div>
 
                 <div className="cart-additional p-8">
-                    <h3>Tổng tiền: {helpers.formatProductPrice(this.totalPrice(list))}</h3>
-                    <Link to={length > 0 ? constants.ROUTES.CART : '/'}>
+                    {/* <h3>Tổng tiền: {helpers.formatProductPrice(this.totalPrice(list))}</h3> */}
+                    <h3>Tổng tiền:</h3>
+                    {/* <Link to={length > 0 ? constants.ROUTES.CART : '/'}>
                         <Button
                             className="m-tb-8 d-block m-lr-auto w-100"
                             type="primary"
                             size="large">
                             {length > 0 ? 'Đến giỏ hàng' : 'Mua sắm ngay'}
                         </Button>
-                    </Link>
+                    </Link> */}
+                    <Button
+                        className="m-tb-8 d-block m-lr-auto w-100"
+                        type="primary"
+                        size="large">
+                        {0 === 0 ? 'Đến giỏ hàng' : 'Mua sắm ngay'}
+                    </Button>
                 </div>
             </div>
         );
