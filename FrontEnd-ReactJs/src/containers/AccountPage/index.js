@@ -9,6 +9,7 @@ import {
 import { Result, Row , Col } from 'antd';
 import constants from '../../constants/index';
 import './index.scss';
+import UpdateAccountForm from './UpdateForm';
 import userLogo from '../../assets/icon/user_32px.png';
 
 class AccountPage extends Component {
@@ -31,7 +32,7 @@ class AccountPage extends Component {
         return (
           <>
             <h2 className="m-b-12">Thông tin tài khoản</h2>
-            
+            <UpdateAccountForm />
           </>
         );
       case 'orders':
@@ -62,7 +63,7 @@ class AccountPage extends Component {
       default:
         <>
           <h2 className="m-b-12">Thông tin tài khoản</h2>
-          {/* <UpdateAccountForm /> */}
+          <UpdateAccountForm />
         </>;
     }
   };
