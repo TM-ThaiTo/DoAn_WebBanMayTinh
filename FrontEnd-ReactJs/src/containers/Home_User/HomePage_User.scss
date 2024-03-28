@@ -2,6 +2,25 @@
     background-color: #e2dfdf;
     padding-bottom: 20px;
 
+    .banner-home {
+        position: relative;
+
+        .filter-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100;
+            height: 100;
+        }
+
+        .trans-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+
     .adv {
         overflow: hidden;
         &-img {
@@ -31,7 +50,7 @@
     }
 
 .hp-01 {
-    padding: 20px;
+    //padding: 20px;
     margin-top: 20px;
     background-color: white;
     border-radius: 8px;
@@ -40,6 +59,14 @@
 
 .hp-02 {
     margin-bottom: 20px;
+}
+
+.hp-03 {
+    padding: 20px;
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 // underline title sign up - login

@@ -1,7 +1,8 @@
 // gender options
 const GENDER_OPTIONS = [
-    { value: true, label: 'Nam' },
-    { value: false, label: 'Nữ' },
+    { value: "Nam", label: 'Nam' },
+    { value: "Nữ", label: 'Nữ' },
+    { value: "Khác", label: "Khác" }
 ];
 
 // hình thức giao hàng
