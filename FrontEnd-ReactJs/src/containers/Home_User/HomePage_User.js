@@ -6,21 +6,28 @@ import "slick-carousel/slick/slick-theme.css";
 // import { path } from '../../utils'
 import { Col, Pagination, Row, Spin } from 'antd';
 
-
 // scss
 import './HomePage_User.scss'
 
 // import giao diện của HomeUser
+<<<<<<< HEAD
+=======
 // import Header_Top from './Header/Header_Top/Header_HomePage_User.js';
 // import Header_Logo from './Header/Header_Logo/Header_Logo.js'
 // import Banner from './Banner/Banner';
+>>>>>>> main
 import FlashSale from './FlashSale/FlashSale.js';
 import Brand from './Brand/Brand.js';
-
 import Laptop from './DoanhMuc/Laptop/index.js';
 import ManHinh from './DoanhMuc/ManHinh/index.js';
 import Gear from './DoanhMuc/Gear/index.js';
 
+<<<<<<< HEAD
+// import All_Products from './SanPham/All_Products.js';
+import Footer from './Footer/Footer.js';
+import SaleOff from './SaleOff/index.js';
+import Filter  from '../../components/Filter';
+=======
 // import DoanhMuc from './DoanhMuc/index.js';
 // import All_Products from './SanPham/All_Products.js';
 // import Footer from './Footer/Footer.js';
@@ -28,14 +35,13 @@ import Gear from './DoanhMuc/Gear/index.js';
 import SaleOff from './SaleOff/index.js';
 import Filter from '../../components/Filter/index.js';
 
+>>>>>>> main
 import AllProduct from './SanPham/index.js';
 
 class HomePage_User extends Component {
-
+  
     render() {
         const { systemMenuPath, isLoggedIn } = this.props;
-
-
         return (
             <>
 
@@ -48,12 +54,22 @@ class HomePage_User extends Component {
                     </div>
                     {/* <Header_Top /> */}
                     {/* <Header_Logo /> */}
-                    <Row className="container">
 
+<<<<<<< HEAD
+                    <div className="Banner">
+                        <SaleOff />
+                        <div className="filter-wrapper trans-center container ">
+                            <Filter />
+                        </div>
+                    </div>
+
+                    <Row className="container">
+=======
                         {/* Banner */}
                         {/* <Col span={24} >
                             <Banner />
                         </Col> */}
+>>>>>>> main
 
                         {/* flash sale */}
                         <Col span={24} className="m-b-32 hp-01">
@@ -61,7 +77,7 @@ class HomePage_User extends Component {
                         </Col>
 
                         {/* thương hiệu nổi bật */}
-                        <Col span={24} className="m-b-32 hp-01">
+                        <Col span={24} className="m-b-32 hp-03">
                             <Brand />
                         </Col>
 

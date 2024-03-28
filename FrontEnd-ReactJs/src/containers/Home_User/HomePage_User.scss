@@ -1,5 +1,5 @@
 .homepage {
-    background-color: #f1eded;
+    background-color: #e2dfdf;
     padding-bottom: 20px;
 
     .banner-home {
@@ -23,38 +23,34 @@
 
     .adv {
         overflow: hidden;
-
         &-img {
-            max-width: 100%;
-            max-height: 200px;
-
-            &:hover,
-            &:active {
-                transform: scale(1.05);
-            }
-
-            transition: all ease 0.65s;
+          max-width: 100%;
+          max-height: 200px;
+          
+          &:hover,
+          &:active {
+            transform: scale(1.05);
+          }
+          transition: all ease 0.65s;
         }
-    }
-
-    .hot-products {
+      }
+      .hot-products {
+        position: absolute;
         h2 {
-            color: #f1f1f1;
+          color: #f1f1f1;
         }
-
         .underline-title::after {
-            background-color: #f1f1f1;
+          background-color: #f1f1f1;
         }
-
-        &>div {
-            background: rgb(63, 94, 251);
-            background: linear-gradient(336deg, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
+        & > div {
+          background: rgb(63, 94, 251);
+          background: linear-gradient(336deg, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
         }
+      }
     }
-}
 
 .hp-01 {
-    padding: 20px;
+    //padding: 20px;
     margin-top: 20px;
     background-color: white;
     border-radius: 8px;
@@ -63,6 +59,14 @@
 
 .hp-02 {
     margin-bottom: 20px;
+}
+
+.hp-03 {
+    padding: 20px;
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 // underline title sign up - login
