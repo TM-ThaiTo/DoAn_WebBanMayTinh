@@ -14,6 +14,7 @@ import '../../FlashSale/FlashSale.scss'
 
 // giao diện trong components
 import ProductView from "../../../../components/ProductView";
+import backgroundImage from '../../../../assets/logo-banner/nenlaptop.png';
 
 const mockProducts = [
     {
@@ -229,23 +230,25 @@ class Laptop extends Component {
         const totalPages = Math.ceil(total / productsPerPage);
 
         return (
-            <Row className="p-16" style={{ minHeight: 400 }} gutter={[16, 16]}>
-                <Col span={24}>
-                    <h2 className="font-weight-700">Doanh mục Laptop</h2>
-                    <div className="underline-title"></div>
-                </Col>
-                {this.showProducts(list)}
-                <Col className="item" span={24}>
-                    <Pagination
-                        className="nut"
-                        current={currentPage}
-                        pageSize={productsPerPage}
-                        total={total}
-                        onChange={this.handlePageChange}
-                        showSizeChanger={false}
-                    />
-                </Col>
-            </Row>
+            <div className="laptop-container" style={{ backgroundImage: `url(${backgroundImage})` }}>
+                <Row className="p-16" style={{ minHeight: 400 }} gutter={[16, 16]}>
+                    <Col span={24}>
+                        <h2 className="font-weight-700">Doanh mục Laptop</h2>
+                        <div className="underline-title"></div>
+                    </Col>
+                    {this.showProducts(list)}
+                    <Col className="item" span={24}>
+                        <Pagination
+                            className="nut"
+                            current={currentPage}
+                            pageSize={productsPerPage}
+                            total={total}
+                            onChange={this.handlePageChange}
+                            showSizeChanger={false}
+                        />
+                    </Col>
+                </Row>
+            </div>
         );
     }
 }

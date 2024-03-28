@@ -61,7 +61,7 @@ class HomePage_User extends Component {
                         </Col>
 
                         {/* thương hiệu nổi bật */}
-                        <Col span={24} className="m-b-32 hp-01">
+                        <Col span={24} className="m-b-32 hp-03">
                             <Brand />
                         </Col>
 

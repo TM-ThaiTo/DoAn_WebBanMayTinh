@@ -10,7 +10,7 @@ import SignUp_User from "../containers/Home_User/Login_Signup_User/SignUp_User/S
 import ForgotPassword from '../containers/Home_User/Login_Signup_User/ForgotPassword/ForgotPassword.js';
 import AllFlashSale from '../containers/Home_User/FlashSale/ALL_FlashSale/AllFlashSale.js';
 import NotFound from '../components/NotFound/NotFound.js';
-
+import AccountPage from '../containers/AccountPage/index.js';
 import AdminPage from '../containers/AdminPage/index.js';
 
 // import Product_View from '../components/Product/ProductView/Product_View';
@@ -60,6 +60,11 @@ const routes = [
     //     exact: true,
     //     main: () => <AllProduct />
     // },
+    {
+        path: PATH.AccountPage,
+        exact: true,
+        main: () => <AccountPage />,
+    },
 
 ];
 

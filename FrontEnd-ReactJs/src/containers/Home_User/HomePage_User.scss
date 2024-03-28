@@ -54,7 +54,7 @@
 }
 
 .hp-01 {
-    padding: 20px;
+    //padding: 20px;
     margin-top: 20px;
     background-color: white;
     border-radius: 8px;
@@ -63,6 +63,14 @@
 
 .hp-02 {
     margin-bottom: 20px;
+}
+
+.hp-03 {
+    padding: 20px;
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 // underline title sign up - login
